@@ -1,10 +1,10 @@
 window.MouseTest = (() => {
     const BUTTONS = [
-        { id: 0, name: "LMB", color: "var(--accent)" },
-        { id: 1, name: "MMB", color: "var(--accent2)" },
-        { id: 2, name: "RMB", color: "var(--warn)" },
-        { id: 3, name: "Back", color: "var(--violet)" },
-        { id: 4, name: "Forward", color: "var(--pink)" },
+        { id: 0, name: "LMB", color: "var(--fg)" },
+        { id: 1, name: "MMB", color: "var(--fg)" },
+        { id: 2, name: "RMB", color: "var(--fg)" },
+        { id: 3, name: "Back", color: "var(--fg)" },
+        { id: 4, name: "Forward", color: "var(--fg)" },
     ];
     let threshold = 100;
     const state = {};
@@ -13,6 +13,7 @@ window.MouseTest = (() => {
     let clickTimestamps = [];
     let points = [];
     let canvas, ctx;
+    let rippleHue = 0;
 
     function reset() {
         BUTTONS.forEach((b) => {
@@ -111,7 +112,7 @@ window.MouseTest = (() => {
         if (state[id]) {
             e.preventDefault();
             const svg = document.getElementById("btn" + id);
-            if (svg) svg.style.fill = "var(--border)";
+            if (svg) svg.style.fill = "var(--border-strong)";
             document.getElementById("card-" + id)?.classList.remove("active");
         }
     }
@@ -120,7 +121,13 @@ window.MouseTest = (() => {
         const rect = els.clickZone.getBoundingClientRect();
         const r = document.createElement("div");
         r.className = "click-ripple";
-        if (isDbl) r.style.borderColor = "var(--danger)";
+        // bright colourful waves — double click stays red (chatter marker)
+        rippleHue = (rippleHue + 47) % 360;
+        const color = isDbl
+            ? "var(--danger)"
+            : `hsl(${rippleHue}, 100%, 55%)`;
+        r.style.borderColor = color;
+        r.style.boxShadow = `0 0 14px ${color}`;
         r.style.left = e.clientX - rect.left + "px";
         r.style.top = e.clientY - rect.top + "px";
         els.clickZone.appendChild(r);
@@ -172,23 +179,29 @@ window.MouseTest = (() => {
         if (ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (points.length >= 2) {
-                const accent = Theme.cssVar("--accent") || "#00ffaa";
                 const now = performance.now();
-                ctx.lineWidth = 2;
+                // rainbow trail — hue rotates over time and along the path
+                const baseHue = (now / 16) % 360;
+                ctx.lineWidth = 3;
                 ctx.lineJoin = "round";
                 ctx.lineCap = "round";
                 for (let i = 1; i < points.length; i++) {
                     const age = now - points[i].t;
                     const alpha = Math.max(0, 1 - age / 1200);
                     if (alpha <= 0) continue;
+                    const hue = (baseHue + i * 6) % 360;
+                    const stroke = `hsl(${hue}, 100%, 60%)`;
                     ctx.globalAlpha = alpha;
-                    ctx.strokeStyle = accent;
+                    ctx.strokeStyle = stroke;
+                    ctx.shadowColor = stroke;
+                    ctx.shadowBlur = 8;
                     ctx.beginPath();
                     ctx.moveTo(points[i - 1].x, points[i - 1].y);
                     ctx.lineTo(points[i].x, points[i].y);
                     ctx.stroke();
                 }
                 ctx.globalAlpha = 1;
+                ctx.shadowBlur = 0;
             }
         }
         requestAnimationFrame(draw);

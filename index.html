@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guilliman's Input Tester</title>
   <link rel="icon" href="img/favicon.png" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Doto:wght@400;600;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -61,8 +63,8 @@
             <svg id="mouseVisual" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="mouseBody" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="var(--card)" />
-                  <stop offset="1" stop-color="var(--bg2)" />
+                  <stop offset="0" stop-color="var(--device-top)" />
+                  <stop offset="1" stop-color="var(--device-bot)" />
                 </linearGradient>
                 <linearGradient id="mouseSheen" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0" stop-color="#ffffff" stop-opacity="0.12" />
@@ -81,16 +83,16 @@
               <ellipse cx="100" cy="302" rx="74" ry="13" fill="var(--shadow)" opacity="0.5" />
 
               <!-- Боковые кнопки (Back / Forward), прикреплены вплотную к левому краю -->
-              <path id="btn4" d="M33,150 L22,150 Q16,150 16,157 L16,170 Q16,176 22,176 L33,176 Z" fill="var(--border)" />
-              <path id="btn3" d="M33,181 L22,181 Q16,181 16,188 L16,201 Q16,207 22,207 L33,207 Z" fill="var(--border)" />
+              <path id="btn4" d="M33,150 L22,150 Q16,150 16,157 L16,170 Q16,176 22,176 L33,176 Z" fill="var(--border-strong)" />
+              <path id="btn3" d="M33,181 L22,181 Q16,181 16,188 L16,201 Q16,207 22,207 L33,207 Z" fill="var(--border-strong)" />
 
               <!-- Корпус -->
               <path d="M30,138 C30,52 56,14 100,14 C144,14 170,52 170,138 L170,216 Q170,302 100,308 Q30,302 30,216 Z"
-                fill="url(#mouseBody)" stroke="var(--border)" stroke-width="2.5" />
+                fill="url(#mouseBody)" stroke="var(--border-strong)" stroke-width="3" />
 
               <!-- Кнопки ЛКМ / ПКМ -->
-              <path id="btn0" d="M33,134 C33,56 58,20 99,20 L99,154 L33,154 Q33,145 33,134 Z" fill="var(--border)" />
-              <path id="btn2" d="M167,134 C167,56 142,20 101,20 L101,154 L167,154 Q167,145 167,134 Z" fill="var(--border)" />
+              <path id="btn0" d="M33,134 C33,56 58,20 99,20 L99,154 L33,154 Q33,145 33,134 Z" fill="var(--border-strong)" />
+              <path id="btn2" d="M167,134 C167,56 142,20 101,20 L101,154 L167,154 Q167,145 167,134 Z" fill="var(--border-strong)" />
 
               <!-- Разделитель кнопок -->
               <line x1="100" y1="19" x2="100" y2="154" stroke="var(--bg)" stroke-width="2" opacity="0.6" />
@@ -98,7 +100,7 @@
               <!-- Колесо -->
               <circle cx="100" cy="72" r="22" fill="url(#wheelGlow)" />
               <rect id="btn1" x="89" y="46" width="22" height="54" rx="11"
-                fill="var(--bg)" stroke="var(--border)" stroke-width="1.5" />
+                fill="var(--bg)" stroke="var(--border-strong)" stroke-width="1.5" />
               <line x1="100" y1="55" x2="100" y2="91" stroke="var(--muted)" stroke-width="1.5"
                 stroke-dasharray="3 3" opacity="0.7" />
 
