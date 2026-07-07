@@ -1,175 +1,196 @@
 <!DOCTYPE html>
 <html lang="ru" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Input Tester Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Tester Pro</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<div class="bg-grid"></div>
+  <div class="bg-grid"></div>
 
-<div class="app-container">
-  <header>
-    <div class="logo">
-      <div class="logo-icon"><i class="fas fa-gamepad"></i></div>
-      <h1 data-i18n="appTitle">Input Tester <span>PRO</span></h1>
-    </div>
-
-    <div class="tabs" role="tablist">
-      <button class="tab active" data-tab="mouse"><i class="fas fa-mouse"></i><span data-i18n="tabMouse">Мышь</span></button>
-      <button class="tab" data-tab="keyboard"><i class="fas fa-keyboard"></i><span data-i18n="tabKeyboard">Клавиатура</span></button>
-      <button class="tab" data-tab="gamepad"><i class="fas fa-gamepad"></i><span data-i18n="tabGamepad">Геймпад</span></button>
-    </div>
-
-    <div class="header-actions">
-      <select class="lang-select" id="langSelect" title="Language">
-        <option value="ru">RU</option>
-        <option value="en">EN</option>
-        <option value="zh">中文</option>
-      </select>
-      <button class="icon-btn" id="themeBtn" title="Theme"><i class="fas fa-moon"></i></button>
-      <button class="reset-btn" id="resetBtn"><i class="fas fa-rotate-left"></i><span data-i18n="reset">Сброс</span></button>
-    </div>
-  </header>
-
-  <!-- ============ MOUSE ============ -->
-  <section class="view active" id="view-mouse">
-    <div class="controls-bar">
-      <div class="threshold-group">
-        <span class="mini-label" data-i18n="dblThreshold">Порог Double Click:</span>
-        <input type="range" class="threshold-slider" id="thresholdSlider" min="100" max="600" value="100">
-        <span class="threshold-val" id="thresholdVal">100ms</span>
+  <div class="app-container">
+    <header>
+      <div class="logo">
+        <div class="logo-icon"><i class="fas fa-gamepad"></i></div>
+        <h1 data-i18n="appTitle">Input Tester <span>PRO</span></h1>
       </div>
-    </div>
-    <div class="mouse-layout">
-      <aside class="panel">
-        <div class="panel-title" data-i18n="visualization">Визуализация</div>
-        <div class="mouse-visual-container">
-          <svg id="mouseVisual" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
-            <path d="M30,120 Q30,20 100,10 Q170,20 170,120 L170,220 Q170,300 100,310 Q30,300 30,220 Z" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
-            <path id="btn0" d="M34,120 Q34,28 100,16 L100,145 L34,145 Z" fill="var(--border)"/>
-            <path id="btn2" d="M166,120 Q166,28 100,16 L100,145 L166,145 Z" fill="var(--border)"/>
-            <rect id="btn1" x="92" y="50" width="16" height="40" rx="8" fill="var(--card)"/>
-          </svg>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="mouse"><i class="fas fa-mouse"></i><span
+            data-i18n="tabMouse">Мышь</span></button>
+        <button class="tab" data-tab="keyboard"><i class="fas fa-keyboard"></i><span
+            data-i18n="tabKeyboard">Клавиатура</span></button>
+        <button class="tab" data-tab="gamepad"><i class="fas fa-gamepad"></i><span
+            data-i18n="tabGamepad">Геймпад</span></button>
+      </div>
+
+      <div class="header-actions">
+        <select class="lang-select" id="langSelect" title="Language">
+          <option value="ru">RU</option>
+          <option value="en">EN</option>
+          <option value="zh">中文</option>
+        </select>
+        <button class="icon-btn" id="themeBtn" title="Theme"><i class="fas fa-moon"></i></button>
+        <button class="reset-btn" id="resetBtn"><i class="fas fa-rotate-left"></i><span
+            data-i18n="reset">Сброс</span></button>
+      </div>
+    </header>
+
+    <!-- ============ MOUSE ============ -->
+    <section class="view active" id="view-mouse">
+      <div class="controls-bar">
+        <div class="threshold-group">
+          <span class="mini-label" data-i18n="dblThreshold">Порог Double Click:</span>
+          <input type="range" class="threshold-slider" id="thresholdSlider" min="100" max="600" value="100">
+          <span class="threshold-val" id="thresholdVal">100ms</span>
         </div>
-        <div class="scroll-section">
-          <div class="scroll-bar-wrap"><div class="scroll-fill" id="scrollFill" style="height:50%"></div></div>
-          <div>
-            <div class="mini-label" data-i18n="scroll">Скролл</div>
-            <div class="mini-stat" id="scrollTotal">0</div>
-            <div class="mini-label" id="scrollDir" style="color:var(--accent)" data-i18n="idle">Покой</div>
+      </div>
+      <div class="mouse-layout">
+        <aside class="panel">
+          <div class="panel-title" data-i18n="visualization">Визуализация</div>
+          <div class="mouse-visual-container">
+            <svg id="mouseVisual" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30,120 Q30,20 100,10 Q170,20 170,120 L170,220 Q170,300 100,310 Q30,300 30,220 Z"
+                fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+              <path id="btn0" d="M34,120 Q34,28 100,16 L100,145 L34,145 Z" fill="var(--border)" />
+              <path id="btn2" d="M166,120 Q166,28 100,16 L100,145 L166,145 Z" fill="var(--border)" />
+              <rect id="btn1" x="92" y="50" width="16" height="40" rx="8" fill="var(--card)" />
+            </svg>
           </div>
-        </div>
-      </aside>
+          <div class="scroll-section">
+            <div class="scroll-bar-wrap">
+              <div class="scroll-fill" id="scrollFill" style="height:50%"></div>
+            </div>
+            <div>
+              <div class="mini-label" data-i18n="scroll">Скролл</div>
+              <div class="mini-stat" id="scrollTotal">0</div>
+              <div class="mini-label" id="scrollDir" style="color:var(--accent)" data-i18n="idle">Покой</div>
+            </div>
+          </div>
+        </aside>
 
-      <main class="center-col">
-        <div class="click-zone" id="clickZone">
-          <p data-i18n="clickZoneHint">Зона тестирования кликов</p>
-          <div class="cps-badge">CPS: <b id="cpsVal">0.0</b></div>
-        </div>
-        <div class="panel tracker-box">
-          <div class="panel-title"><span data-i18n="movement">Движение</span> (<span data-i18n="speed">Скорость</span>: <span id="trackSpeed">0</span> px/s)</div>
-          <canvas id="trackerCanvas"></canvas>
-        </div>
-      </main>
+        <main class="center-col">
+          <div class="click-zone" id="clickZone">
+            <p data-i18n="clickZoneHint">Зона тестирования кликов</p>
+            <div class="cps-badge">CPS: <b id="cpsVal">0.0</b></div>
+          </div>
+          <div class="panel tracker-box">
+            <div class="panel-title"><span data-i18n="movement">Движение</span> (<span
+                data-i18n="speed">Скорость</span>: <span id="trackSpeed">0</span> px/s)</div>
+            <canvas id="trackerCanvas"></canvas>
+          </div>
+        </main>
 
-      <aside class="panel">
-        <div class="panel-title" data-i18n="buttonStats">Статистика кнопок</div>
-        <div class="stats-list" id="statsList"></div>
-        <div class="panel-title" data-i18n="eventLog">Лог событий</div>
-        <div class="log-container" id="logList"></div>
-      </aside>
-    </div>
-  </section>
-
-  <!-- ============ KEYBOARD ============ -->
-  <section class="view" id="view-keyboard">
-    <div class="kbd-stats-bar">
-      <div class="kbd-stat-card">
-        <span class="mini-label" data-i18n="totalPresses">Всего нажатий</span>
-        <span class="big" id="kbdTotal">0</span>
-      </div>
-      <div class="kbd-stat-card">
-        <span class="mini-label" data-i18n="uniqueKeys">Уникальных клавиш</span>
-        <span class="big" id="kbdUnique">0</span>
-      </div>
-      <div class="kbd-stat-card rollover">
-        <span class="mini-label" data-i18n="rollover">Одновременно (NKRO)</span>
-        <span class="big" id="kbdRollover">0</span>
-      </div>
-      <div class="kbd-stat-card">
-        <span class="mini-label" data-i18n="maxRollover">Максимум одновременно</span>
-        <span class="big" id="kbdMaxRollover">0</span>
-      </div>
-    </div>
-    <div class="kbd-main">
-      <div class="panel kbd-visual-panel">
-        <div class="keyboard" id="keyboard"></div>
-      </div>
-      <aside class="kbd-side">
-        <div class="last-key-display">
-          <div class="mini-label" data-i18n="lastKey">Последняя клавиша</div>
-          <div class="lk-key" id="lkKey">—</div>
-          <div class="lk-code" id="lkCode">code: —  ·  keyCode: —</div>
-        </div>
-        <div class="panel" style="flex:1; min-height:0;">
+        <aside class="panel">
+          <div class="panel-title" data-i18n="buttonStats">Статистика кнопок</div>
+          <div class="stats-list" id="statsList"></div>
           <div class="panel-title" data-i18n="eventLog">Лог событий</div>
-          <div class="log-container" id="kbdLog"></div>
-        </div>
-      </aside>
-    </div>
-  </section>
+          <div class="log-container" id="logList"></div>
+        </aside>
+      </div>
+    </section>
 
-  <!-- ============ GAMEPAD ============ -->
-  <section class="view" id="view-gamepad">
-    <div class="gp-empty" id="gpEmpty">
-      <i class="fas fa-gamepad pulse"></i>
-      <div>
-        <div style="font-size:16px; font-weight:600; color:var(--fg)" data-i18n="gpConnect">Подключите геймпад</div>
-        <div style="margin-top:6px" data-i18n="gpConnectHint">Нажмите любую кнопку на контроллере, чтобы активировать его</div>
-      </div>
-    </div>
-    <div class="gp-content" id="gpContent">
-      <div class="gp-header">
-        <div class="gp-dot"></div>
-        <div style="flex:1">
-          <div class="gp-id" id="gpId">—</div>
-          <div class="gp-meta" id="gpMeta">—</div>
+    <!-- ============ KEYBOARD ============ -->
+    <section class="view" id="view-keyboard">
+      <div class="kbd-stats-bar">
+        <div class="kbd-stat-card">
+          <span class="mini-label" data-i18n="totalPresses">Всего нажатий</span>
+          <span class="big" id="kbdTotal">0</span>
         </div>
-        <button class="reset-btn" id="gpVibrateBtn"><i class="fas fa-wave-square"></i><span data-i18n="vibrate">Вибрация</span></button>
-      </div>
-      <div class="gp-main">
-        <div class="panel">
-          <div class="panel-title" data-i18n="buttons">Кнопки</div>
-          <div class="gp-buttons-grid" id="gpButtons"></div>
+        <div class="kbd-stat-card">
+          <span class="mini-label" data-i18n="uniqueKeys">Уникальных клавиш</span>
+          <span class="big" id="kbdUnique">0</span>
         </div>
-        <div class="panel gp-sticks">
-          <div class="panel-title" data-i18n="sticks">Стики</div>
-          <div>
-            <div class="stick-pad"><div class="stick-cross"></div><div class="stick-dot" id="stickL"></div></div>
-            <div class="stick-label" id="stickLLabel">L: 0.00, 0.00</div>
+        <div class="kbd-stat-card rollover">
+          <span class="mini-label" data-i18n="rollover">Одновременно (NKRO)</span>
+          <span class="big" id="kbdRollover">0</span>
+        </div>
+        <div class="kbd-stat-card">
+          <span class="mini-label" data-i18n="maxRollover">Максимум одновременно</span>
+          <span class="big" id="kbdMaxRollover">0</span>
+        </div>
+      </div>
+      <div class="kbd-main">
+        <div class="panel kbd-visual-panel">
+          <div class="keyboard" id="keyboard"></div>
+        </div>
+        <aside class="kbd-side">
+          <div class="last-key-display">
+            <div class="mini-label" data-i18n="lastKey">Последняя клавиша</div>
+            <div class="lk-key" id="lkKey">—</div>
+            <div class="lk-code" id="lkCode">code: — · keyCode: —</div>
           </div>
-          <div>
-            <div class="stick-pad"><div class="stick-cross"></div><div class="stick-dot" id="stickR"></div></div>
-            <div class="stick-label" id="stickRLabel">R: 0.00, 0.00</div>
+          <div class="panel" style="flex:1; min-height:0;">
+            <div class="panel-title" data-i18n="eventLog">Лог событий</div>
+            <div class="log-container" id="kbdLog"></div>
           </div>
-        </div>
+        </aside>
       </div>
-    </div>
-  </section>
-</div>
+    </section>
 
-<!-- Модули (классические скрипты, порядок важен: main.js — последним) -->
-<script src="js/i18n.js"></script>
-<script src="js/theme.js"></script>
-<script src="js/router.js"></script>
-<script src="js/mouse.js"></script>
-<script src="js/keyboard.js"></script>
-<script src="js/gamepad.js"></script>
-<script src="js/main.js"></script>
+    <!-- ============ GAMEPAD ============ -->
+    <section class="view" id="view-gamepad">
+      <div class="gp-empty" id="gpEmpty">
+        <i class="fas fa-gamepad pulse"></i>
+        <div>
+          <div style="font-size:16px; font-weight:600; color:var(--fg)" data-i18n="gpConnect">Подключите геймпад</div>
+          <div style="margin-top:6px" data-i18n="gpConnectHint">Нажмите любую кнопку на контроллере, чтобы активировать
+            его</div>
+        </div>
+      </div>
+      <div class="gp-content" id="gpContent">
+        <div class="gp-header">
+          <div class="gp-dot"></div>
+          <div style="flex:1">
+            <div class="gp-id" id="gpId">—</div>
+            <div class="gp-meta" id="gpMeta">—</div>
+          </div>
+          <button class="reset-btn" id="gpVibrateBtn"><i class="fas fa-wave-square"></i><span
+              data-i18n="vibrate">Вибрация</span></button>
+        </div>
+        <div class="gp-main">
+          <div class="panel">
+            <div class="panel-title" data-i18n="buttons">Кнопки</div>
+            <div class="gp-buttons-grid" id="gpButtons"></div>
+          </div>
+          <div class="panel gp-sticks">
+            <div class="panel-title" data-i18n="sticks">Стики</div>
+            <div>
+              <div class="stick-pad">
+                <div class="stick-cross"></div>
+                <div class="stick-dot" id="stickL"></div>
+              </div>
+              <div class="stick-label" id="stickLLabel">L: 0.00, 0.00</div>
+            </div>
+            <div>
+              <div class="stick-pad">
+                <div class="stick-cross"></div>
+                <div class="stick-dot" id="stickR"></div>
+              </div>
+              <div class="stick-label" id="stickRLabel">R: 0.00, 0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Модули (классические скрипты, порядок важен: main.js — последним) -->
+  <script src="js/i18n.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/mouse.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/gamepad.js"></script>
+  <script src="js/main.js"></script>
 </body>
+
 </html>
