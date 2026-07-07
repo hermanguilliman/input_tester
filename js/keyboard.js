@@ -1,10 +1,4 @@
-/* ================================================================
-   KeyboardTest — полная раскладка, NKRO, счётчики
-   Зависит от глобального `Router`.
-   Публикует глобальный объект `KeyboardTest`.
-   ================================================================ */
 window.KeyboardTest = (() => {
-    // Раскладка: массив рядов, каждая клавиша = { code, label, sub?, w? }
     const LAYOUT = [
         [
             { code: "Escape", label: "Esc" },
@@ -100,12 +94,12 @@ window.KeyboardTest = (() => {
         ],
     ];
 
-    const counts = {}; // code -> нажатий
+    const counts = {};
     const pressed = new Set();
     let total = 0,
         maxRollover = 0;
     const els = {};
-    const keyEls = {}; // code -> элемент
+    const keyEls = {};
 
     function build() {
         const kb = document.getElementById("keyboard");
@@ -172,7 +166,6 @@ window.KeyboardTest = (() => {
     }
 
     function clearStuck() {
-        // при потере фокуса снимаем «залипшие» клавиши
         pressed.forEach((code) => {
             const el = keyEls[code];
             if (el) el.classList.remove("pressed");

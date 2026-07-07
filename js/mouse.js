@@ -1,8 +1,3 @@
-/* ================================================================
-   MouseTest — улучшенное тестирование мыши
-   Зависит от глобальных `I18n`, `Theme`, `Router`.
-   Публикует глобальный объект `MouseTest`.
-   ================================================================ */
 window.MouseTest = (() => {
     const BUTTONS = [
         { id: 0, name: "LMB", color: "var(--accent)" },
@@ -15,8 +10,8 @@ window.MouseTest = (() => {
     const state = {};
     const els = {};
     let scrollAcc = 0;
-    let clickTimestamps = []; // для CPS
-    let points = []; // трекер движения
+    let clickTimestamps = [];
+    let points = [];
     let canvas, ctx;
 
     function reset() {
@@ -81,7 +76,6 @@ window.MouseTest = (() => {
         }
         s.lastTime = now;
 
-        // CPS: клики за последнюю секунду
         clickTimestamps.push(now);
         clickTimestamps = clickTimestamps.filter((t) => now - t <= 1000);
         els.cpsVal.innerText = clickTimestamps.length.toFixed(1);
@@ -156,7 +150,6 @@ window.MouseTest = (() => {
         points.push(pt);
         if (points.length > 80) points.shift();
 
-        // Корректная скорость: px за реальный Δt (px/s)
         if (points.length >= 2) {
             const p1 = points[points.length - 1];
             const p0 = points[points.length - 2];

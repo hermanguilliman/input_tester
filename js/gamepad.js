@@ -1,7 +1,3 @@
-/* ================================================================
-   GamepadTest — Gamepad API (опрос через requestAnimationFrame)
-   Публикует глобальный объект `GamepadTest`.
-   ================================================================ */
 window.GamepadTest = (() => {
     const els = {};
     let activeIndex = null;
@@ -150,7 +146,6 @@ window.GamepadTest = (() => {
             }
         });
 
-        // на случай, если геймпад уже подключён
         const existing = pickActive();
         if (existing !== null) setActive(existing);
         loop();
