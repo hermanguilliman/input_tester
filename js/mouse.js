@@ -109,6 +109,7 @@ window.MouseTest = (() => {
     function onUp(e) {
         const id = e.button;
         if (state[id]) {
+            e.preventDefault();
             const svg = document.getElementById("btn" + id);
             if (svg) svg.style.fill = "var(--border)";
             document.getElementById("card-" + id)?.classList.remove("active");
@@ -221,6 +222,9 @@ window.MouseTest = (() => {
         window.addEventListener("wheel", onWheel, { passive: true });
         window.addEventListener("mousemove", onMove);
         window.addEventListener("resize", resize);
+        window.addEventListener("auxclick", (e) => {
+            if (state[e.button] !== undefined) e.preventDefault();
+        });
         I18n.onChange(refreshCardLabels);
 
         resize();

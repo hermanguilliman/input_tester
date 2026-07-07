@@ -96,7 +96,7 @@ header {
     object-fit: cover;
     display: block;
     flex-shrink: 0;
-    animation: logo-hue 12s linear infinite;
+    animation: logo-hue 1s linear infinite;
 }
 @keyframes logo-hue {
     from { filter: hue-rotate(0deg); }
