@@ -90,15 +90,12 @@ header {
     gap: 10px;
 }
 .logo-icon {
-    width: 34px;
-    height: 34px;
+    width: 82px;
+    height: 50px;
     border-radius: 9px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 16px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
 }
 .logo h1 {
     font-size: 18px;

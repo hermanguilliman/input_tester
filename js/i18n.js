@@ -1,7 +1,7 @@
 window.I18n = (() => {
     const DICT = {
         ru: {
-            appTitle: "Input Tester <span>PRO</span>",
+            appTitle: "Guilliman's Input Tester",
             tabMouse: "Мышь",
             tabKeyboard: "Клавиатура",
             tabGamepad: "Геймпад",
@@ -33,7 +33,7 @@ window.I18n = (() => {
             up: "Вверх",
         },
         en: {
-            appTitle: "Input Tester <span>PRO</span>",
+            appTitle: "Guilliman's Input Tester",
             tabMouse: "Mouse",
             tabKeyboard: "Keyboard",
             tabGamepad: "Gamepad",
@@ -64,7 +64,7 @@ window.I18n = (() => {
             up: "Up",
         },
         zh: {
-            appTitle: "Input Tester <span>PRO</span>",
+            appTitle: "Guilliman's Input Tester",
             tabMouse: "鼠标",
             tabKeyboard: "键盘",
             tabGamepad: "手柄",
