@@ -949,6 +949,14 @@ header {
     color: var(--display);
     line-height: 1;
 }
+.touch-stat-full {
+    grid-column: 1 / -1;
+}
+.touch-gesture-val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .touch-coords-panel {
     flex-shrink: 0;
