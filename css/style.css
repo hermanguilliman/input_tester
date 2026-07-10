@@ -1055,6 +1055,24 @@ header {
 }
 
 /* ============================================================
+   HAPTIC WARNING
+   ============================================================ */
+.haptic-warn {
+    display: none;
+    width: 100%;
+    padding: 8px 12px;
+    margin-top: 6px;
+    background: rgba(255, 180, 0, 0.12);
+    border: 1px solid rgba(255, 180, 0, 0.3);
+    border-radius: 6px;
+    color: #ffb400;
+    font-size: 11px;
+    line-height: 1.4;
+    font-family: "JetBrains Mono", monospace;
+    box-sizing: border-box;
+}
+
+/* ============================================================
    FULLSCREEN DRAW OVERLAY
    ============================================================ */
 .draw-overlay {

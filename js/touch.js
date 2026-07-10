@@ -136,8 +136,27 @@ window.TouchTest = (() => {
 
     function vibrate() {
         if (hapticEnabled && navigator.vibrate) {
-            navigator.vibrate(40);
+            var ok = navigator.vibrate(40);
+            if (els.hapticWarn) els.hapticWarn.style.display = ok ? "none" : "block";
         }
+    }
+
+    function testVibration() {
+        if (!navigator.vibrate) return false;
+        try {
+            return navigator.vibrate(1);
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function showVibrationWarning() {
+        if (testVibration()) {
+            els.hapticWarn.style.display = "none";
+            return true;
+        }
+        els.hapticWarn.style.display = "block";
+        return false;
     }
 
     function onTouchStart(e) {
@@ -336,7 +355,13 @@ window.TouchTest = (() => {
         drawCtx = drawCanvas.getContext("2d");
 
         els.hapticCheck = document.getElementById("hapticCheck");
-        els.hapticCheck.addEventListener("change", function () { hapticEnabled = els.hapticCheck.checked; });
+        hapticEnabled = els.hapticCheck.checked;
+        els.hapticCheck.addEventListener("change", function () {
+            hapticEnabled = els.hapticCheck.checked;
+            if (hapticEnabled) showVibrationWarning();
+            else if (els.hapticWarn) els.hapticWarn.style.display = "none";
+        });
+        els.hapticWarn = document.getElementById("hapticWarn");
 
         els.drawModeCheck = document.getElementById("drawModeCheck");
         els.drawModeCheck.addEventListener("change", function () {
