@@ -171,7 +171,7 @@ header {
     border-radius: 5px;
     cursor: pointer;
     color: var(--muted);
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-weight: 700;
     font-size: 12px;
     letter-spacing: 0.06em;
@@ -222,7 +222,7 @@ header {
     color: var(--fg);
     padding: 0 10px;
     cursor: pointer;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-weight: 700;
     font-size: 12px;
     letter-spacing: 0.04em;
@@ -236,7 +236,7 @@ header {
     background: transparent;
     color: var(--fg);
     cursor: pointer;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-weight: 700;
     font-size: 12px;
     letter-spacing: 0.06em;
@@ -276,7 +276,7 @@ header {
 
 /* instrument-panel label + trailing rule line */
 .panel-title {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -295,7 +295,7 @@ header {
 }
 
 .mini-label {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     font-weight: 700;
     color: var(--muted);
@@ -303,7 +303,7 @@ header {
     letter-spacing: 0.08em;
 }
 .mini-stat {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 15px;
     font-weight: 700;
     color: var(--fg);
@@ -345,7 +345,7 @@ header {
     max-width: 300px;
 }
 .threshold-val {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     color: var(--display);
     font-weight: 700;
     font-size: 14px;
@@ -423,7 +423,7 @@ header {
 }
 .click-zone p {
     color: var(--muted);
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -435,7 +435,7 @@ header {
     position: absolute;
     top: 12px;
     right: 14px;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -485,7 +485,7 @@ header {
     animation: shake 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .mini-name {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -499,7 +499,7 @@ header {
     min-height: 0;
     background: var(--bg2);
     border-radius: 8px;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 10px;
     padding: 10px;
     overflow-y: auto;
@@ -543,7 +543,7 @@ header {
     gap: 6px;
 }
 .kbd-stat-card .big {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 32px;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -593,7 +593,7 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 12px;
     font-weight: 400;
     color: var(--fg);
@@ -665,9 +665,9 @@ header {
     text-align: center;
     border: 1px solid var(--border);
 }
-/* the single Doto hero moment */
+/* Tektur display hero moment */
 .last-key-display .lk-key {
-    font-family: "Doto", "Space Mono", monospace;
+    font-family: "Tektur", "JetBrains Mono", monospace;
     font-size: 44px;
     font-weight: 800;
     letter-spacing: 0.02em;
@@ -676,7 +676,7 @@ header {
     line-height: 1;
 }
 .last-key-display .lk-code {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--muted);
@@ -741,7 +741,7 @@ header {
     color: var(--display);
 }
 .gp-header .gp-meta {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--muted);
@@ -781,7 +781,7 @@ header {
     overflow: hidden;
 }
 .gp-btn .gp-btn-name {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -789,7 +789,7 @@ header {
     color: var(--muted);
 }
 .gp-btn .gp-btn-val {
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 16px;
     font-weight: 700;
     color: var(--fg);
@@ -860,7 +860,7 @@ header {
 }
 .stick-label {
     text-align: center;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--muted);
@@ -915,7 +915,7 @@ header {
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--muted);
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -932,27 +932,48 @@ header {
     min-height: 0;
 }
 
+.touch-stats-panel {
+    flex-shrink: 0;
+}
 .touch-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 8px;
 }
-.touch-stat {
+.touch-stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
-.touch-stat-val {
-    font-family: "Doto", "Space Mono", monospace;
+.touch-stat-card-wide {
+    grid-column: 1 / -1;
+}
+.touch-stat-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.touch-stat-number {
+    font-family: "Tektur", "JetBrains Mono", monospace;
     font-size: 28px;
     font-weight: 800;
     color: var(--display);
     line-height: 1;
 }
-.touch-stat-full {
-    grid-column: 1 / -1;
-}
-.touch-gesture-val {
+.touch-gesture-number {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 16px;
+    font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -975,7 +996,7 @@ header {
     padding: 4px 8px;
     background: var(--bg2);
     border-radius: 4px;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
 }
 .touch-finger {
@@ -994,7 +1015,7 @@ header {
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    font-family: "Space Mono", monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -1138,11 +1159,11 @@ header {
         flex-shrink: 0;
     }
 
-    .touch-stats-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    .touch-stat-val {
+    .touch-stat-number {
         font-size: 22px;
+    }
+    .touch-gesture-number {
+        font-size: 14px;
     }
 
     .touch-coords-panel {
@@ -1184,6 +1205,9 @@ header {
     }
     .mouse-layout .click-zone {
         min-height: 240px;
+    }
+    .touch-gesture-number {
+        font-size: 12px;
     }
 }
 

@@ -68,7 +68,7 @@ window.TouchTest = (() => {
             ctx.arc(t.x, t.y, 6, 0, Math.PI * 2);
             ctx.fillStyle = color;
             ctx.fill();
-            ctx.font = "12px Space Mono, monospace";
+            ctx.font = "12px JetBrains Mono, monospace";
             ctx.fillStyle = color;
             ctx.textAlign = "center";
             ctx.fillText("#" + id, t.x, t.y - 38);

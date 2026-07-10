@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Doto:wght@400;600;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Tektur:wght@400;600;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -84,24 +84,24 @@
           </div>
         </main>
         <aside class="touch-side">
-          <div class="panel">
+          <div class="panel touch-stats-panel">
             <div class="panel-title" data-i18n="touchStats">Статистика касаний</div>
             <div class="touch-stats-grid">
-              <div class="touch-stat">
-                <span class="mini-label" data-i18n="activeTouches">Активных</span>
-                <span class="touch-stat-val" id="touchCount">0</span>
+              <div class="touch-stat-card">
+                <span class="touch-stat-label" data-i18n="activeTouches">Активных</span>
+                <span class="touch-stat-number" id="touchCount">0</span>
               </div>
-              <div class="touch-stat">
-                <span class="mini-label" data-i18n="maxConcurrent">Макс. одновременно</span>
-                <span class="touch-stat-val" id="touchMaxConcurrent">0</span>
+              <div class="touch-stat-card">
+                <span class="touch-stat-label" data-i18n="maxConcurrent">Макс. одновременно</span>
+                <span class="touch-stat-number" id="touchMaxConcurrent">0</span>
               </div>
-              <div class="touch-stat">
-                <span class="mini-label" data-i18n="totalTouches">Всего касаний</span>
-                <span class="touch-stat-val" id="touchTotal">0</span>
+              <div class="touch-stat-card">
+                <span class="touch-stat-label" data-i18n="totalTouches">Всего касаний</span>
+                <span class="touch-stat-number" id="touchTotal">0</span>
               </div>
-              <div class="touch-stat touch-stat-full">
-                <span class="mini-label" data-i18n="lastGesture">Жест</span>
-                <span class="touch-stat-val touch-gesture-val" id="touchLastGesture">—</span>
+              <div class="touch-stat-card touch-stat-card-wide">
+                <span class="touch-stat-label" data-i18n="lastGesture">Жест</span>
+                <span class="touch-stat-number touch-gesture-number" id="touchLastGesture">—</span>
               </div>
             </div>
           </div>
