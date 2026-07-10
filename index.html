@@ -55,6 +55,8 @@
             data-i18n="tabGamepad">Геймпад</span></button>
         <button class="tab" data-tab="mic"><i class="fas fa-microphone"></i><span
             data-i18n="tabMic">Микрофон</span></button>
+        <button class="tab" data-tab="camera"><i class="fas fa-video"></i><span
+            data-i18n="tabCamera">Камера</span></button>
       </div>
 
       <div class="header-actions">
@@ -357,6 +359,51 @@
         </div>
       </div>
     </section>
+
+    <section class="view" id="view-camera">
+      <div class="controls-bar">
+        <button class="reset-btn" id="camToggleBtn"><i class="fas fa-video"></i><span
+            data-i18n="camStart">Старт</span></button>
+        <label class="haptic-toggle">
+          <input type="checkbox" id="camGridToggle">
+          <span class="haptic-slider"></span>
+          <span data-i18n="camGrid">Сетка</span>
+        </label>
+        <button class="reset-btn" id="camScreenshotBtn" title="Screenshot"><i class="fas fa-camera"></i></button>
+        <span class="mic-status" id="camStatusMsg" data-i18n="camIdle">Ожидание</span>
+      </div>
+      <div class="cam-layout">
+        <div class="panel cam-preview-panel">
+          <div class="cam-preview-wrap" id="camPreviewWrap">
+            <video id="camVideo" autoplay playsinline muted></video>
+            <canvas id="camGridCanvas"></canvas>
+            <div class="cam-hint" id="camHint" data-i18n="camHint">Нажмите «Старт» для запуска камеры</div>
+          </div>
+        </div>
+        <div class="cam-side">
+          <div class="kbd-stats-bar" style="display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0">
+            <div class="kbd-stat-card" style="flex:1">
+              <span class="mini-label" data-i18n="camFps">FPS</span>
+              <span class="big" id="camFps">0</span>
+            </div>
+            <div class="kbd-stat-card" style="flex:1">
+              <span class="mini-label" data-i18n="camResolution">Разрешение</span>
+              <span class="big" id="camResolution" style="font-size:18px">—</span>
+            </div>
+          </div>
+          <div class="panel cam-device-panel">
+            <div class="panel-title" data-i18n="camDevice">Устройство</div>
+            <div class="mic-device-info" id="camDeviceInfo">
+              <div class="mini-label" style="color:var(--disabled);padding:4px 0">—</div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel-title" data-i18n="eventLog">Лог событий</div>
+            <div class="log-container" id="camLog"></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script src="js/i18n.js"></script>
@@ -367,6 +414,7 @@
   <script src="js/gamepad.js"></script>
   <script src="js/touch.js"></script>
   <script src="js/mic.js"></script>
+  <script src="js/camera.js"></script>
   <script src="js/main.js"></script>
 </body>
 

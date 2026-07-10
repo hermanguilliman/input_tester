@@ -1080,20 +1080,26 @@ header {
 
     .tabs {
         flex-wrap: wrap;
-        gap: 2px;
-        padding: 2px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        padding: 4px;
         order: 1;
         width: 100%;
     }
     .tab {
-        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        padding: 6px 8px;
+        gap: 4px;
+        padding: 10px 6px;
         font-size: 10px;
-        min-width: 0;
+        min-height: 48px;
     }
     .tab i {
-        display: none;
+        display: block;
+        font-size: 16px;
     }
 
     .header-actions {
@@ -1208,6 +1214,14 @@ header {
     }
     .touch-gesture-number {
         font-size: 12px;
+    }
+    .tab {
+        padding: 6px 4px;
+        font-size: 9px;
+        min-height: 40px;
+    }
+    .tab i {
+        font-size: 14px;
     }
 }
 
@@ -1359,6 +1373,88 @@ header {
     }
     .meter-bar-track {
         height: 32px;
+    }
+}
+
+/* ============================================================
+   CAMERA VIEW
+   ============================================================ */
+#view-camera {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+}
+#view-camera.active {
+    display: flex;
+}
+
+.cam-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+.cam-preview-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.cam-preview-wrap {
+    flex: 1;
+    position: relative;
+    background: var(--bg2);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cam-preview-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+.cam-preview-wrap canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.cam-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.cam-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+}
+
+.cam-device-panel {
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .cam-layout {
+        grid-template-columns: 1fr;
     }
 }
 
