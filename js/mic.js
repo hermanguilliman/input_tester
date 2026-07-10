@@ -4,18 +4,21 @@ window.MicTest = (() => {
     let dataArray = null, rafId = null;
     let running = false, autoMute = true;
     let peakLevel = 0, clipCount = 0, startTime = 0;
+    let smoothPct = 0, smoothPeak = 0;
 
     function reset() {
         stop();
         peakLevel = 0;
         clipCount = 0;
         startTime = 0;
+        smoothPct = 0;
+        smoothPeak = 0;
         els.peakDb.innerText = "-∞ dB";
         els.currentDb.innerText = "-∞ dB";
         els.clipCount.innerText = "0";
         els.duration.innerText = "0.0s";
         els.meterFill.style.width = "0%";
-        els.meterFill.style.background = "var(--ok)";
+        els.meterFill.style.background = "linear-gradient(90deg, var(--ok), #6abf40 50%, var(--warn) 75%, var(--danger))";
         els.meterPeak.style.left = "0%";
         els.deviceInfo.innerHTML = "";
         log("Reset", "");
@@ -91,21 +94,32 @@ window.MicTest = (() => {
             if (v > max) max = v;
         }
 
-        var pct = Math.min(max * 100, 100);
-        els.meterFill.style.width = pct + "%";
-        if (pct > 90) els.meterFill.style.background = "var(--danger)";
-        else if (pct > 70) els.meterFill.style.background = "var(--warn)";
-        else els.meterFill.style.background = "var(--ok)";
+        var rawPct = Math.min(max * 100, 100);
+        var alpha = 0.18;
+        smoothPct = smoothPct + alpha * (rawPct - smoothPct);
+        var pct = Math.min(Math.max(smoothPct, 0), 100);
 
-        var currentDb = max > 0 ? Math.round(20 * Math.log10(max)) : -Infinity;
+        if (pct > 90) els.meterFill.style.background = "linear-gradient(90deg, var(--danger), #ff4444)";
+        else if (pct > 70) els.meterFill.style.background = "linear-gradient(90deg, var(--warn), #e8c35c 70%, var(--danger))";
+        else els.meterFill.style.background = "linear-gradient(90deg, var(--ok), #6abf40 50%, var(--warn) 75%, var(--danger))";
+
+        els.meterFill.style.width = pct + "%";
+
+        var currentDb = smoothPct > 0.05 ? Math.round(20 * Math.log10(smoothPct / 100)) : -Infinity;
         els.currentDb.innerText = currentDb === -Infinity ? "-∞ dB" : currentDb + " dB";
 
-        if (max > peakLevel) {
-            peakLevel = max;
-            var peakDb = max > 0 ? Math.round(20 * Math.log10(peakLevel)) : -Infinity;
-            els.peakDb.innerText = peakDb === -Infinity ? "-∞ dB" : peakDb + " dB";
-            els.meterPeak.style.left = (peakLevel * 100) + "%";
+        var peakAlpha = 0.06;
+        if (rawPct / 100 > smoothPeak) {
+            smoothPeak = rawPct / 100;
+        } else {
+            smoothPeak = smoothPeak - peakAlpha * (smoothPeak - rawPct / 100);
+            if (smoothPeak < 0.001) smoothPeak = 0;
         }
+        var peakPct = Math.min(smoothPeak * 100, 100);
+        els.meterPeak.style.left = peakPct + "%";
+
+        var peakDbVal = smoothPeak > 0.003 ? Math.round(20 * Math.log10(smoothPeak)) : -Infinity;
+        els.peakDb.innerText = peakDbVal === -Infinity ? "-∞ dB" : peakDbVal + " dB";
 
         if (max >= 0.99) clipCount++;
 
