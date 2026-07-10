@@ -1,9 +1,9 @@
 param(
     [string]$SourceImage = "..\1.png",
-    [string]$Output = "..\img\og-image.png",
-    [string]$Title = "Guilliman's Input Tester",
-    [string]$Line1 = "Тестирование мыши, клавиатуры и геймпада",
-    [string]$Line2 = "",
+    [string]$Output = "..\img\og-image.webp",
+    [string]$Title = "Guilliman Input Diagnostics",
+    [string]$Line1 = "Мышь · Клавиатура · Тачскрин · Геймпад",
+    [string]$Line2 = "Микрофон · Камера",
     [string]$Url = "input.guilliman.ru"
 )
 

@@ -1,7 +1,7 @@
 window.I18n = (() => {
     const DICT = {
         ru: {
-            appTitle: "Guilliman's Input Tester",
+            appTitle: "Guilliman Input Diagnostics",
             tabTouch: "Сенсор",
             tabMouse: "Мышь",
             tabKeyboard: "Клавиатура",
@@ -65,7 +65,7 @@ window.I18n = (() => {
             camHint: "Нажмите «Старт» для запуска камеры",
         },
         en: {
-            appTitle: "Guilliman's Input Tester",
+            appTitle: "Guilliman Input Diagnostics",
             tabTouch: "Touch",
             tabMouse: "Mouse",
             tabKeyboard: "Keyboard",
@@ -128,7 +128,7 @@ window.I18n = (() => {
             camHint: "Press Start to activate camera",
         },
         zh: {
-            appTitle: "Guilliman's Input Tester",
+            appTitle: "Guilliman Input Diagnostics",
             tabTouch: "触屏",
             tabMouse: "鼠标",
             tabKeyboard: "键盘",
