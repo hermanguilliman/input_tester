@@ -77,7 +77,7 @@ window.TouchTest = (() => {
 
     function vibrate() {
         if (hapticEnabled && navigator.vibrate) {
-            navigator.vibrate(10);
+            navigator.vibrate(30);
         }
     }
 

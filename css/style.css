@@ -567,7 +567,7 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: auto;
+    overflow: hidden;
 }
 .keyboard {
     display: flex;
@@ -584,9 +584,9 @@ header {
     justify-content: center;
 }
 .key {
-    min-width: 42px;
-    height: 42px;
-    border-radius: 6px;
+    min-width: 48px;
+    height: 48px;
+    border-radius: 7px;
     background: var(--key-bg);
     border: 1px solid var(--border-strong);
     display: flex;
@@ -594,7 +594,7 @@ header {
     align-items: center;
     justify-content: center;
     font-family: "Space Mono", monospace;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: var(--fg);
     padding: 0 6px;
@@ -610,22 +610,22 @@ header {
     color: var(--muted);
 }
 .key.w-15 {
-    min-width: 66px;
+    min-width: 75px;
 }
 .key.w-175 {
-    min-width: 78px;
+    min-width: 88px;
 }
 .key.w-2 {
-    min-width: 90px;
+    min-width: 102px;
 }
 .key.w-225 {
-    min-width: 100px;
+    min-width: 114px;
 }
 .key.w-25 {
-    min-width: 112px;
+    min-width: 128px;
 }
 .key.w-6 {
-    min-width: 280px;
+    min-width: 320px;
 }
 /* pressed = keycap lights up (inverted) */
 .key.pressed {
@@ -1099,13 +1099,33 @@ header {
     }
 
     .kbd-visual-panel {
-        overflow: auto;
-        justify-content: flex-start;
+        overflow: hidden;
+        justify-content: center;
+        padding: 8px;
     }
-    .kbd-visual-panel .keyboard {
-        transform: scale(0.75);
-        transform-origin: top center;
+    .keyboard {
+        gap: 4px;
+        padding: 10px;
     }
+    .kbd-row {
+        gap: 4px;
+    }
+    .key {
+        min-width: 34px;
+        height: 34px;
+        font-size: 9px;
+        border-radius: 5px;
+        border-width: 1px;
+    }
+    .key .sub {
+        font-size: 6px;
+    }
+    .key.w-15 { min-width: 52px; }
+    .key.w-175 { min-width: 62px; }
+    .key.w-2 { min-width: 72px; }
+    .key.w-225 { min-width: 80px; }
+    .key.w-25 { min-width: 90px; }
+    .key.w-6 { min-width: 224px; }
     .kbd-side {
         flex-shrink: 0;
     }
@@ -1123,9 +1143,27 @@ header {
 }
 
 @media (max-width: 480px) {
-    .kbd-visual-panel .keyboard {
-        transform: scale(0.55);
+    .keyboard {
+        gap: 3px;
+        padding: 6px;
     }
+    .kbd-row {
+        gap: 3px;
+    }
+    .key {
+        min-width: 26px;
+        height: 26px;
+        font-size: 7px;
+    }
+    .key .sub {
+        font-size: 5px;
+    }
+    .key.w-15 { min-width: 40px; }
+    .key.w-175 { min-width: 48px; }
+    .key.w-2 { min-width: 54px; }
+    .key.w-225 { min-width: 62px; }
+    .key.w-25 { min-width: 70px; }
+    .key.w-6 { min-width: 172px; }
     .kbd-stats-bar {
         flex-wrap: wrap;
         gap: 8px;
