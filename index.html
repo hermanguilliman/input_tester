@@ -45,6 +45,8 @@
       </div>
 
       <div class="tabs" role="tablist">
+        <button class="tab" data-tab="touch"><i class="fas fa-hand-pointer"></i><span
+            data-i18n="tabTouch">Сенсор</span></button>
         <button class="tab active" data-tab="mouse"><i class="fas fa-mouse"></i><span
             data-i18n="tabMouse">Мышь</span></button>
         <button class="tab" data-tab="keyboard"><i class="fas fa-keyboard"></i><span
@@ -65,6 +67,50 @@
       </div>
     </header>
 
+
+    <section class="view" id="view-touch">
+      <div class="touch-layout">
+        <main class="touch-main">
+          <div class="panel touch-area" id="touchArea">
+            <canvas id="touchCanvas"></canvas>
+            <p class="touch-hint" data-i18n="touchHint">Коснитесь экрана</p>
+          </div>
+        </main>
+        <aside class="touch-side">
+          <div class="panel">
+            <div class="panel-title" data-i18n="touchStats">Статистика касаний</div>
+            <div class="touch-stats-grid">
+              <div class="touch-stat">
+                <span class="mini-label" data-i18n="activeTouches">Активных</span>
+                <span class="touch-stat-val" id="touchCount">0</span>
+              </div>
+              <div class="touch-stat">
+                <span class="mini-label" data-i18n="maxConcurrent">Макс. одновременно</span>
+                <span class="touch-stat-val" id="touchMaxConcurrent">0</span>
+              </div>
+              <div class="touch-stat">
+                <span class="mini-label" data-i18n="totalTouches">Всего касаний</span>
+                <span class="touch-stat-val" id="touchTotal">0</span>
+              </div>
+              <div class="touch-stat">
+                <span class="mini-label" data-i18n="lastGesture">Жест</span>
+                <span class="touch-stat-val" id="touchLastGesture">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel touch-coords-panel">
+            <div class="panel-title" data-i18n="touchCoords">Координаты</div>
+            <div class="touch-coords" id="touchCoords">
+              <div class="mini-label" style="padding:8px;text-align:center">—</div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1; min-height:0;">
+            <div class="panel-title" data-i18n="eventLog">Лог событий</div>
+            <div class="log-container" id="touchLog"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
 
     <section class="view active" id="view-mouse">
       <div class="controls-bar">
@@ -252,6 +298,7 @@
   <script src="js/mouse.js"></script>
   <script src="js/keyboard.js"></script>
   <script src="js/gamepad.js"></script>
+  <script src="js/touch.js"></script>
   <script src="js/main.js"></script>
 </body>
 

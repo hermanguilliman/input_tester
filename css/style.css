@@ -868,6 +868,197 @@ header {
 }
 
 /* ============================================================
+   TOUCH VIEW
+   ============================================================ */
+#view-touch {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+}
+#view-touch.active {
+    display: flex;
+}
+
+.touch-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+.touch-main {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.touch-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    background: var(--bg2);
+    background-image: radial-gradient(circle, var(--grid-color) 0.5px, transparent 0.5px);
+    background-size: 14px 14px;
+    min-height: 200px;
+}
+.touch-area canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+.touch-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--muted);
+    font-family: "Space Mono", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    pointer-events: none;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.touch-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+}
+
+.touch-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.touch-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.touch-stat-val {
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--display);
+    line-height: 1;
+}
+
+.touch-coords-panel {
+    flex-shrink: 0;
+    max-height: 180px;
+}
+.touch-coords {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+}
+.touch-coord-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 8px;
+    background: var(--bg2);
+    border-radius: 4px;
+    font-family: "Space Mono", monospace;
+    font-size: 11px;
+}
+.touch-finger {
+    color: var(--accent);
+    font-weight: 700;
+}
+.touch-xy {
+    color: var(--fg);
+}
+
+/* ============================================================
+   MOBILE LAYOUT — touch first, responsive
+   ============================================================ */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    header {
+        flex-wrap: wrap;
+        height: auto;
+        gap: 8px;
+        padding-bottom: 8px;
+    }
+    .logo h1 {
+        font-size: 1rem;
+        white-space: normal;
+    }
+    .logo-icon {
+        width: 48px;
+        height: 30px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+        gap: 2px;
+        padding: 2px;
+        order: 1;
+        width: 100%;
+    }
+    .tab {
+        flex: 1;
+        justify-content: center;
+        padding: 6px 8px;
+        font-size: 10px;
+        min-width: 0;
+    }
+    .tab i {
+        display: none;
+    }
+
+    .header-actions {
+        gap: 4px;
+    }
+    .reset-btn {
+        padding: 0 10px;
+        font-size: 10px;
+    }
+    .reset-btn span {
+        display: none;
+    }
+
+    .mouse-layout,
+    .kbd-main,
+    .gp-main,
+    .touch-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .mouse-layout aside.panel:first-child {
+        display: none;
+    }
+
+    .kbd-stat-card .big {
+        font-size: 22px;
+    }
+
+    .touch-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .touch-stat-val {
+        font-size: 22px;
+    }
+
+    .touch-coords-panel {
+        max-height: 120px;
+    }
+}
+
+/* ============================================================
    MOTION — mechanical, subtle ease-out only
    ============================================================ */
 @keyframes shake {
