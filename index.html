@@ -53,6 +53,8 @@
             data-i18n="tabTouch">Сенсор</span></button>
         <button class="tab" data-tab="gamepad"><i class="fas fa-gamepad"></i><span
             data-i18n="tabGamepad">Геймпад</span></button>
+        <button class="tab" data-tab="mic"><i class="fas fa-microphone"></i><span
+            data-i18n="tabMic">Микрофон</span></button>
       </div>
 
       <div class="header-actions">
@@ -296,8 +298,66 @@
         </div>
       </div>
     </section>
-  </div>
 
+    <section class="view" id="view-mic">
+      <div class="controls-bar">
+        <button class="reset-btn" id="micToggleBtn"><i class="fas fa-microphone"></i><span
+            data-i18n="micStart">Старт</span></button>
+        <label class="haptic-toggle">
+          <input type="checkbox" id="micAutoMute" checked>
+          <span class="haptic-slider"></span>
+          <span data-i18n="micAutoMute">Авто-мьют</span>
+        </label>
+        <span class="mic-status" id="micStatusMsg" data-i18n="micIdle">Ожидание</span>
+      </div>
+      <div class="mic-layout">
+        <div class="panel mic-meter-panel">
+          <div class="panel-title"><span data-i18n="micLevel">Уровень</span></div>
+          <div class="mic-meter-container">
+            <div class="meter-bar-track">
+              <div class="meter-bar-fill" id="micMeterFill"></div>
+              <div class="meter-bar-peak" id="micMeterPeak"></div>
+              <div class="meter-bar-labels">
+                <span>0</span><span>-12</span><span>-24</span><span>-36</span><span>-48</span><span>-∞</span>
+              </div>
+            </div>
+            <div class="meter-readings">
+              <div class="meter-reading">
+                <span class="mini-label" data-i18n="micCurrent">Текущий</span>
+                <span class="meter-value" id="micCurrentDb">-∞ dB</span>
+              </div>
+              <div class="meter-reading">
+                <span class="mini-label" data-i18n="micPeak">Пик</span>
+                <span class="meter-value" id="micPeakDb">-∞ dB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mic-side">
+          <div class="kbd-stats-bar" style="display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0">
+            <div class="kbd-stat-card" style="flex:1">
+              <span class="mini-label" data-i18n="micClips">Клиппинг</span>
+              <span class="big" id="micClipCount">0</span>
+            </div>
+            <div class="kbd-stat-card" style="flex:1">
+              <span class="mini-label" data-i18n="micDuration">Длительность</span>
+              <span class="big" id="micDuration">0.0s</span>
+            </div>
+          </div>
+          <div class="panel mic-device-panel">
+            <div class="panel-title" data-i18n="micDevice">Устройство</div>
+            <div class="mic-device-info" id="micDeviceInfo">
+              <div class="mini-label" style="color:var(--disabled);padding:4px 0">—</div>
+            </div>
+          </div>
+          <div class="panel" style="flex:1;min-height:0">
+            <div class="panel-title" data-i18n="eventLog">Лог событий</div>
+            <div class="log-container" id="micLog"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <script src="js/i18n.js"></script>
   <script src="js/theme.js"></script>
@@ -306,6 +366,7 @@
   <script src="js/keyboard.js"></script>
   <script src="js/gamepad.js"></script>
   <script src="js/touch.js"></script>
+  <script src="js/mic.js"></script>
   <script src="js/main.js"></script>
 </body>
 

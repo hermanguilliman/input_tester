@@ -1212,6 +1212,157 @@ header {
 }
 
 /* ============================================================
+   MIC VIEW
+   ============================================================ */
+#view-mic {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+}
+#view-mic.active {
+    display: flex;
+}
+
+.mic-status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-left: auto;
+}
+
+.mic-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+.mic-meter-panel {
+    display: flex;
+    flex-direction: column;
+}
+.mic-meter-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 8px 0;
+}
+.meter-bar-track {
+    position: relative;
+    height: 40px;
+    background: var(--bg2);
+    border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    overflow: hidden;
+}
+.meter-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--ok);
+    transition: width 0.04s linear;
+    border-radius: 5px;
+}
+.meter-bar-peak {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 3px;
+    height: 100%;
+    background: var(--display);
+    border-radius: 2px;
+    transition: left 0.08s ease;
+}
+.meter-bar-labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 6px 4px;
+    pointer-events: none;
+}
+.meter-bar-labels span {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--disabled);
+    opacity: 0.5;
+}
+
+.meter-readings {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+}
+.meter-reading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.meter-value {
+    font-family: "Tektur", "JetBrains Mono", monospace;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--display);
+    line-height: 1;
+}
+
+.mic-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+}
+
+.mic-device-panel {
+    flex-shrink: 0;
+}
+.mic-device-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.mic-device-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.mic-device-specs {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+@media (max-width: 768px) {
+    .mic-layout {
+        grid-template-columns: 1fr;
+    }
+    .meter-value {
+        font-size: 22px;
+    }
+    .meter-bar-track {
+        height: 32px;
+    }
+}
+
+/* ============================================================
    MOTION — mechanical, subtle ease-out only
    ============================================================ */
 @keyframes shake {

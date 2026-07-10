@@ -19,6 +19,7 @@
     KeyboardTest.init();
     GamepadTest.init();
     TouchTest.init();
+    MicTest.init();
 
     document.getElementById("themeBtn").addEventListener("click", Theme.toggle);
     Theme.apply();
@@ -32,6 +33,7 @@
         if (Router.current === "touch") TouchTest.reset();
         else if (Router.current === "mouse") MouseTest.reset();
         else if (Router.current === "keyboard") KeyboardTest.reset();
-        else GamepadTest.reset();
+        else if (Router.current === "gamepad") GamepadTest.reset();
+        else MicTest.reset();
     });
 })();
