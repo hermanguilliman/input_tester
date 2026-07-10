@@ -1055,12 +1055,74 @@ header {
 }
 
 /* ============================================================
+   FULLSCREEN DRAW OVERLAY
+   ============================================================ */
+.draw-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000;
+    display: none;
+    touch-action: none;
+}
+.draw-overlay.active {
+    display: block;
+}
+.draw-overlay canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+}
+.draw-overlay .draw-grid-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+.draw-exit-btn {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 10000;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.draw-exit-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================
    MOBILE LAYOUT — touch first, responsive
    ============================================================ */
 @media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
     .app-container {
         padding: 8px;
         gap: 8px;
+        height: auto;
+        min-height: 0;
     }
 
     header {
@@ -1102,6 +1164,11 @@ header {
         font-size: 16px;
     }
 
+    .controls-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 14px;
+    }
     .header-actions {
         gap: 4px;
     }
@@ -1222,6 +1289,21 @@ header {
     }
     .tab i {
         font-size: 14px;
+    }
+    .haptic-toggle {
+        font-size: 10px;
+        gap: 6px;
+    }
+    .haptic-slider {
+        width: 30px;
+        height: 18px;
+    }
+    .haptic-slider::after {
+        width: 12px;
+        height: 12px;
+    }
+    .haptic-toggle input:checked + .haptic-slider::after {
+        left: 14px;
     }
 }
 

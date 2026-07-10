@@ -79,6 +79,12 @@
           <span class="haptic-slider"></span>
           <span data-i18n="haptic">Хаптика</span>
         </label>
+        <label class="haptic-toggle">
+          <input type="checkbox" id="drawModeCheck">
+          <span class="haptic-slider"></span>
+          <span data-i18n="drawMode">Рисование</span>
+        </label>
+        <button class="reset-btn" id="clearDrawBtn" style="padding:0 10px;height:32px" title="Clear"><i class="fas fa-eraser"></i></button>
       </div>
       <div class="touch-layout">
         <main class="touch-main">
@@ -404,6 +410,12 @@
         </div>
       </div>
     </section>
+  </div>
+
+  <div class="draw-overlay" id="drawOverlay">
+    <div class="draw-grid-bg"></div>
+    <canvas id="drawCanvas"></canvas>
+    <button class="draw-exit-btn" id="drawExitBtn"><i class="fas fa-times"></i></button>
   </div>
 
   <script src="js/i18n.js"></script>

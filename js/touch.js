@@ -1,15 +1,19 @@
 window.TouchTest = (() => {
-    const els = {};
-    let touchCount = 0;
-    let maxConcurrent = 0;
-    let totalTouches = 0;
-    let lastTapTime = 0;
-    let lastTouchEnd = null;
-    let activeTouches = new Map();
-    let startX = 0, startY = 0;
-    let canvas, ctx;
-    let currentMode = "idle";
-    let hapticEnabled = false;
+    var els = {};
+    var touchCount = 0;
+    var maxConcurrent = 0;
+    var totalTouches = 0;
+    var lastTapTime = 0;
+    var lastTouchEnd = null;
+    var activeTouches = new Map();
+    var startX = 0, startY = 0;
+    var canvas, ctx;
+    var currentMode = "idle";
+    var hapticEnabled = false;
+    var drawMode = false;
+    var drawPaths = new Map();
+    var drawHistory = [];
+    var overlay, drawCanvas, drawCtx;
 
     function reset() {
         touchCount = 0;
@@ -22,18 +26,25 @@ window.TouchTest = (() => {
         els.touchCount.innerText = "0";
         els.maxConcurrent.innerText = "0";
         els.totalTouches.innerText = "0";
-        els.lastGesture.innerText = "—";
+        els.lastGesture.innerText = "\u2014";
         els.coordsList.innerHTML = "";
         els.touchLog.innerHTML = "";
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        clearDrawings();
+    }
+
+    function clearDrawings() {
+        drawPaths.clear();
+        drawHistory = [];
+        if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (drawCtx) drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
     }
 
     function log(msg, type) {
-        const entry = document.createElement("div");
+        var entry = document.createElement("div");
         entry.className = "log-entry" + (type ? " " + type : "");
-        const t = new Date();
-        const ts = t.toLocaleTimeString("ru", { hour12: false }) + "." + String(t.getMilliseconds()).padStart(3, "0");
-        entry.innerHTML = `${ts} ${msg}`;
+        var t = new Date();
+        var ts = t.toLocaleTimeString("ru", { hour12: false }) + "." + String(t.getMilliseconds()).padStart(3, "0");
+        entry.innerHTML = ts + " " + msg;
         els.touchLog.prepend(entry);
         while (els.touchLog.childNodes.length > 40) els.touchLog.lastChild.remove();
     }
@@ -41,22 +52,56 @@ window.TouchTest = (() => {
     function updateCoords() {
         els.coordsList.innerHTML = "";
         if (activeTouches.size === 0) {
-            els.coordsList.innerHTML = '<div class="mini-label" style="padding:8px;text-align:center">—</div>';
+            els.coordsList.innerHTML = '<div class="mini-label" style="padding:8px;text-align:center">\u2014</div>';
             return;
         }
-        activeTouches.forEach((t, id) => {
-            const row = document.createElement("div");
+        activeTouches.forEach(function (t, id) {
+            var row = document.createElement("div");
             row.className = "touch-coord-row";
-            row.innerHTML = `<span class="touch-finger">#${id}</span> <span class="touch-xy">${Math.round(t.x)}, ${Math.round(t.y)}</span>`;
+            row.innerHTML = '<span class="touch-finger">#' + id + '</span> <span class="touch-xy">' + Math.round(t.x) + ", " + Math.round(t.y) + "</span>";
             els.coordsList.appendChild(row);
         });
     }
 
-    function drawTouches() {
+    function touchColor(id) {
+        var hue = (id * 60) % 360;
+        return "hsl(" + hue + ", 100%, 60%)";
+    }
+
+    function drawAll(c) {
+        if (!c) return;
+        var w = c.canvas.width, h = c.canvas.height;
+        c.clearRect(0, 0, w, h);
+
+        drawHistory.forEach(function (p) {
+            drawPolyline(c, p.points, p.color);
+        });
+        drawPaths.forEach(function (points, id) {
+            if (points.length < 2) return;
+            drawPolyline(c, points, touchColor(id));
+        });
+        drawPaths.forEach(function (points, id) {
+            if (points.length === 0) return;
+            var p = points[points.length - 1];
+            c.beginPath();
+            c.arc(p.x, p.y, 4, 0, Math.PI * 2);
+            c.fillStyle = touchColor(id);
+            c.fill();
+        });
+    }
+
+    function drawNormalTouches() {
+        if (!ctx) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        activeTouches.forEach((t, id) => {
-            const hue = (id * 60) % 360;
-            const color = `hsl(${hue}, 100%, 60%)`;
+        drawHistory.forEach(function (p) {
+            drawPolyline(ctx, p.points, p.color);
+        });
+        drawPaths.forEach(function (points, id) {
+            if (points.length < 2) return;
+            drawPolyline(ctx, points, touchColor(id));
+        });
+        activeTouches.forEach(function (t, id) {
+            var color = touchColor(id);
             ctx.beginPath();
             ctx.arc(t.x, t.y, 30, 0, Math.PI * 2);
             ctx.fillStyle = color + "30";
@@ -75,6 +120,20 @@ window.TouchTest = (() => {
         });
     }
 
+    function drawPolyline(c, points, color) {
+        if (points.length < 2) return;
+        c.beginPath();
+        c.moveTo(points[0].x, points[0].y);
+        for (var i = 1; i < points.length; i++) {
+            c.lineTo(points[i].x, points[i].y);
+        }
+        c.strokeStyle = color;
+        c.lineWidth = 4;
+        c.lineCap = "round";
+        c.lineJoin = "round";
+        c.stroke();
+    }
+
     function vibrate() {
         if (hapticEnabled && navigator.vibrate) {
             navigator.vibrate(40);
@@ -84,13 +143,19 @@ window.TouchTest = (() => {
     function onTouchStart(e) {
         e.preventDefault();
         vibrate();
-        const rect = canvas.getBoundingClientRect();
-        for (let i = 0; i < e.changedTouches.length; i++) {
-            const t = e.changedTouches[i];
-            const id = t.identifier;
-            const x = t.clientX - rect.left;
-            const y = t.clientY - rect.top;
-            activeTouches.set(id, { x, y, sx: x, sy: y, startTime: performance.now() });
+        var target = drawMode ? drawCanvas : canvas;
+        var rect = target.getBoundingClientRect();
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            var t = e.changedTouches[i];
+            var id = t.identifier;
+            var x = t.clientX - rect.left;
+            var y = t.clientY - rect.top;
+            activeTouches.set(id, { x: x, y: y, sx: x, sy: y, startTime: performance.now() });
+
+            if (drawMode) {
+                if (!drawPaths.has(id)) drawPaths.set(id, []);
+                drawPaths.get(id).push({ x: x, y: y });
+            }
 
             if (activeTouches.size === 1) {
                 startX = x;
@@ -104,108 +169,155 @@ window.TouchTest = (() => {
         els.maxConcurrent.innerText = maxConcurrent;
         els.totalTouches.innerText = totalTouches;
         updateCoords();
-        drawTouches();
+        if (drawMode) drawAll(drawCtx);
+        else drawNormalTouches();
 
-        const now = performance.now();
-        if (lastTouchEnd && now - lastTouchEnd < 300) {
-            log("Double tap", "dbl");
-            els.lastGesture.innerText = "Double Tap";
-        } else {
-            log("Touch start (" + e.changedTouches.length + " finger" + (e.changedTouches.length > 1 ? "s" : "") + ")", "");
+        if (!drawMode) {
+            var now = performance.now();
+            if (lastTouchEnd && now - lastTouchEnd < 300) {
+                log("Double tap", "dbl");
+                els.lastGesture.innerText = "Double Tap";
+            } else {
+                log("Touch start (" + e.changedTouches.length + " finger" + (e.changedTouches.length > 1 ? "s" : "") + ")", "");
+            }
         }
     }
 
     function onTouchMove(e) {
         e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        for (let i = 0; i < e.changedTouches.length; i++) {
-            const t = e.changedTouches[i];
-            const id = t.identifier;
+        var target = drawMode ? drawCanvas : canvas;
+        var rect = target.getBoundingClientRect();
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            var t = e.changedTouches[i];
+            var id = t.identifier;
             if (activeTouches.has(id)) {
+                var x = t.clientX - rect.left;
+                var y = t.clientY - rect.top;
                 activeTouches.set(id, {
-                    x: t.clientX - rect.left,
-                    y: t.clientY - rect.top,
+                    x: x, y: y,
                     sx: activeTouches.get(id).sx,
                     sy: activeTouches.get(id).sy,
                     startTime: activeTouches.get(id).startTime,
                 });
+                if (drawMode && drawPaths.has(id)) {
+                    drawPaths.get(id).push({ x: x, y: y });
+                }
             }
         }
         updateCoords();
-        drawTouches();
+        if (drawMode) drawAll(drawCtx);
+        else drawNormalTouches();
 
-        if (activeTouches.size === 1) {
-            const t = activeTouches.values().next().value;
-            const dx = t.x - startX;
-            const dy = t.y - startY;
-            const dist = Math.hypot(dx, dy);
+        if (!drawMode && activeTouches.size === 1) {
+            var t = activeTouches.values().next().value;
+            var dx = t.x - startX;
+            var dy = t.y - startY;
+            var dist = Math.hypot(dx, dy);
             if (dist > 30) {
-                const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-                let dir;
+                var angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                var dir;
                 if (angle > -45 && angle <= 45) dir = "Right";
                 else if (angle > 45 && angle <= 135) dir = "Down";
                 else if (angle > -135 && angle <= -45) dir = "Up";
                 else dir = "Left";
                 els.lastGesture.innerText = "Swipe " + dir;
             }
-        } else if (activeTouches.size === 2) {
-            const arr = Array.from(activeTouches.values());
-            const d = Math.hypot(arr[0].x - arr[1].x, arr[0].y - arr[1].y);
+        } else if (!drawMode && activeTouches.size === 2) {
+            var arr = Array.from(activeTouches.values());
+            var d = Math.hypot(arr[0].x - arr[1].x, arr[0].y - arr[1].y);
             if (d > 50) els.lastGesture.innerText = "Pinch (" + Math.round(d) + "px)";
         }
     }
 
     function onTouchEnd(e) {
         e.preventDefault();
-        for (let i = 0; i < e.changedTouches.length; i++) {
-            const t = e.changedTouches[i];
-            activeTouches.delete(t.identifier);
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            var t = e.changedTouches[i];
+            var id = t.identifier;
+            if (drawMode && drawPaths.has(id)) {
+                drawHistory.push({ points: drawPaths.get(id).slice(), color: touchColor(id) });
+                drawPaths.delete(id);
+            }
+            activeTouches.delete(id);
         }
         touchCount = activeTouches.size;
         els.touchCount.innerText = touchCount;
-        if (touchCount === 0) {
-            els.lastGesture.innerText = "—";
+        if (touchCount === 0 && !drawMode) {
+            els.lastGesture.innerText = "\u2014";
         }
         updateCoords();
-        drawTouches();
+        if (drawMode) drawAll(drawCtx);
+        else drawNormalTouches();
         lastTouchEnd = performance.now();
 
-        const wasSingle = e.changedTouches.length === 1 && touchCount === 0;
-        if (wasSingle) {
-            const now = performance.now();
-            if (lastTapTime && now - lastTapTime < 300) {
-                log("Double tap", "dbl");
-                els.lastGesture.innerText = "Double Tap";
-                lastTapTime = 0;
+        if (!drawMode) {
+            var wasSingle = e.changedTouches.length === 1 && touchCount === 0;
+            if (wasSingle) {
+                var now = performance.now();
+                if (lastTapTime && now - lastTapTime < 300) {
+                    log("Double tap", "dbl");
+                    els.lastGesture.innerText = "Double Tap";
+                    lastTapTime = 0;
+                } else {
+                    log("Tap", "");
+                    els.lastGesture.innerText = "Tap";
+                    lastTapTime = now;
+                }
             } else {
-                log("Tap", "");
-                els.lastGesture.innerText = "Tap";
-                lastTapTime = now;
+                log("Touch end (" + e.changedTouches.length + ")", "");
             }
-        } else {
-            log("Touch end (" + e.changedTouches.length + ")", "");
         }
     }
 
     function onTouchCancel(e) {
         e.preventDefault();
+        if (drawMode) drawPaths.clear();
         activeTouches.clear();
         touchCount = 0;
         els.touchCount.innerText = "0";
         updateCoords();
-        drawTouches();
+        if (drawMode) drawAll(drawCtx);
+        else drawNormalTouches();
         log("Touch cancelled", "");
+    }
+
+    function resizeOverlay() {
+        if (!drawCanvas) return;
+        drawCanvas.width = window.innerWidth;
+        drawCanvas.height = window.innerHeight;
+        if (drawMode) drawAll(drawCtx);
+    }
+
+    function enterDrawMode() {
+        drawMode = true;
+        drawPaths.clear();
+        drawHistory = [];
+        overlay.classList.add("active");
+        resizeOverlay();
+        document.body.style.overflow = "hidden";
+        els.lastGesture.innerText = "Draw Mode";
+        log("Draw mode on", "");
+    }
+
+    function exitDrawMode() {
+        drawMode = false;
+        activeTouches.clear();
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+        els.lastGesture.innerText = "\u2014";
+        drawNormalTouches();
+        log("Draw mode off", "");
     }
 
     function resize() {
         if (!canvas) return;
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
-        drawTouches();
+        drawNormalTouches();
     }
 
     function init() {
-        const map = {
+        var map = {
             touchCount: "touchCount",
             maxConcurrent: "touchMaxConcurrent",
             totalTouches: "touchTotal",
@@ -214,23 +326,52 @@ window.TouchTest = (() => {
             touchLog: "touchLog",
             touchArea: "touchArea",
         };
-        Object.keys(map).forEach((k) => (els[k] = document.getElementById(map[k])));
+        Object.keys(map).forEach(function (k) { els[k] = document.getElementById(map[k]); });
 
         canvas = document.getElementById("touchCanvas");
         ctx = canvas.getContext("2d");
 
+        overlay = document.getElementById("drawOverlay");
+        drawCanvas = document.getElementById("drawCanvas");
+        drawCtx = drawCanvas.getContext("2d");
+
         els.hapticCheck = document.getElementById("hapticCheck");
-        els.hapticCheck.addEventListener("change", () => { hapticEnabled = els.hapticCheck.checked; });
+        els.hapticCheck.addEventListener("change", function () { hapticEnabled = els.hapticCheck.checked; });
+
+        els.drawModeCheck = document.getElementById("drawModeCheck");
+        els.drawModeCheck.addEventListener("change", function () {
+            if (els.drawModeCheck.checked) enterDrawMode();
+            else exitDrawMode();
+        });
+
+        els.clearDrawBtn = document.getElementById("clearDrawBtn");
+        els.clearDrawBtn.addEventListener("click", function () {
+            clearDrawings();
+            log("Drawings cleared", "");
+        });
+
+        document.getElementById("drawExitBtn").addEventListener("click", function () {
+            els.drawModeCheck.checked = false;
+            exitDrawMode();
+        });
 
         els.touchArea.addEventListener("touchstart", onTouchStart, { passive: false });
         els.touchArea.addEventListener("touchmove", onTouchMove, { passive: false });
         els.touchArea.addEventListener("touchend", onTouchEnd, { passive: false });
         els.touchArea.addEventListener("touchcancel", onTouchCancel, { passive: false });
 
-        window.addEventListener("resize", resize);
+        drawCanvas.addEventListener("touchstart", onTouchStart, { passive: false });
+        drawCanvas.addEventListener("touchmove", onTouchMove, { passive: false });
+        drawCanvas.addEventListener("touchend", onTouchEnd, { passive: false });
+        drawCanvas.addEventListener("touchcancel", onTouchCancel, { passive: false });
+
+        window.addEventListener("resize", function () {
+            resize();
+            resizeOverlay();
+        });
         resize();
         reset();
     }
 
-    return { init, reset };
+    return { init: init, reset: reset };
 })();
