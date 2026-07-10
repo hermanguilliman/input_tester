@@ -39,6 +39,7 @@ window.I18n = (() => {
             totalTouches: "Всего касаний",
             lastGesture: "Жест",
             touchCoords: "Координаты",
+            haptic: "Тактильная отдача",
         },
         en: {
             appTitle: "Guilliman's Input Tester",
@@ -78,6 +79,7 @@ window.I18n = (() => {
             totalTouches: "Total touches",
             lastGesture: "Gesture",
             touchCoords: "Coordinates",
+            haptic: "Haptic Feedback",
         },
         zh: {
             appTitle: "Guilliman's Input Tester",
@@ -117,6 +119,7 @@ window.I18n = (() => {
             totalTouches: "总触摸数",
             lastGesture: "手势",
             touchCoords: "坐标",
+            haptic: "触觉反馈",
         },
     };
     const LANG_NAMES = { ru: "ru", en: "en", zh: "zh" };

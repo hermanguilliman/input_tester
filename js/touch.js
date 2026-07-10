@@ -9,6 +9,7 @@ window.TouchTest = (() => {
     let startX = 0, startY = 0;
     let canvas, ctx;
     let currentMode = "idle";
+    let hapticEnabled = false;
 
     function reset() {
         touchCount = 0;
@@ -74,8 +75,15 @@ window.TouchTest = (() => {
         });
     }
 
+    function vibrate() {
+        if (hapticEnabled && navigator.vibrate) {
+            navigator.vibrate(10);
+        }
+    }
+
     function onTouchStart(e) {
         e.preventDefault();
+        vibrate();
         const rect = canvas.getBoundingClientRect();
         for (let i = 0; i < e.changedTouches.length; i++) {
             const t = e.changedTouches[i];
@@ -210,6 +218,9 @@ window.TouchTest = (() => {
 
         canvas = document.getElementById("touchCanvas");
         ctx = canvas.getContext("2d");
+
+        els.hapticCheck = document.getElementById("hapticCheck");
+        els.hapticCheck.addEventListener("change", () => { hapticEnabled = els.hapticCheck.checked; });
 
         els.touchArea.addEventListener("touchstart", onTouchStart, { passive: false });
         els.touchArea.addEventListener("touchmove", onTouchMove, { passive: false });
