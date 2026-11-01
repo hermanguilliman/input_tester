@@ -1,7 +1,12 @@
 (function bootstrap() {
     window.addEventListener("contextmenu", (e) => {
-        if (!e.target.closest("header") && !e.target.closest(".controls-bar"))
+        if (
+            !e.target.closest("header") &&
+            !e.target.closest(".controls-bar") &&
+            !e.target.closest("#hubDialog")
+        ) {
             e.preventDefault();
+        }
     });
 
     Router.init();
@@ -12,9 +17,12 @@
         const touchTab = tabs.querySelector('[data-tab="touch"]');
         if (touchTab) {
             tabs.insertBefore(touchTab, tabs.firstChild);
-            Router.go("touch");
+            if (!Router.hasInitialHash) {
+                Router.go("touch", false);
+            }
         }
     }
+
     MouseTest.init();
     KeyboardTest.init();
     GamepadTest.init();

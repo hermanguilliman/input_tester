@@ -1,7 +1,7 @@
 window.KeyboardTest = (() => {
-    const LAYOUT = [
+    const MAIN_CLUSTER = [
         [
-            { code: "Escape", label: "Esc" },
+            { code: "Escape", label: "Esc", gapBottom: true },
             { code: "F1", label: "F1" },
             { code: "F2", label: "F2" },
             { code: "F3", label: "F3" },
@@ -74,40 +74,103 @@ window.KeyboardTest = (() => {
             { code: "Comma", label: "," },
             { code: "Period", label: "." },
             { code: "Slash", label: "/" },
-            { code: "ShiftRight", label: "Shift", w: "w-25" },
+            { code: "ShiftRight", label: "Shift", w: "w-275" },
         ],
         [
-            { code: "ControlLeft", label: "Ctrl", w: "w-15" },
-            { code: "MetaLeft", label: "Win", w: "w-15" },
-            { code: "AltLeft", label: "Alt", w: "w-15" },
-            { code: "Space", label: "", w: "w-6" },
-            { code: "AltRight", label: "Alt", w: "w-15" },
-            { code: "MetaRight", label: "Win", w: "w-15" },
-            { code: "ContextMenu", label: "☰", w: "w-15" },
-            { code: "ControlRight", label: "Ctrl", w: "w-15" },
+            { code: "ControlLeft", label: "Ctrl", w: "w-125" },
+            { code: "MetaLeft", label: "Win", w: "w-125" },
+            { code: "AltLeft", label: "Alt", w: "w-125" },
+            { code: "Space", label: "", w: "w-625" },
+            { code: "AltRight", label: "Alt", w: "w-125" },
+            { code: "MetaRight", label: "Win", w: "w-125" },
+            { code: "ContextMenu", label: "☰", w: "w-125" },
+            { code: "ControlRight", label: "Ctrl", w: "w-125" },
         ],
+    ];
+
+    const NAV_CLUSTER = [
+        [
+            { code: "PrintScreen", label: "PrtSc", gapBottom: true },
+            { code: "ScrollLock", label: "ScrLk" },
+            { code: "Pause", label: "Pause" },
+        ],
+        [
+            { code: "Insert", label: "Ins" },
+            { code: "Home", label: "Home" },
+            { code: "PageUp", label: "PgUp" },
+        ],
+        [
+            { code: "Delete", label: "Del" },
+            { code: "End", label: "End" },
+            { code: "PageDown", label: "PgDn" },
+        ],
+        [{ spacer: true }],
+        [{ spacer: true }, { code: "ArrowUp", label: "↑" }, { spacer: true }],
         [
             { code: "ArrowLeft", label: "←" },
-            { code: "ArrowUp", label: "↑" },
             { code: "ArrowDown", label: "↓" },
             { code: "ArrowRight", label: "→" },
         ],
     ];
 
+    const NUM_CLUSTER = [
+        [
+            { spacer: true, gapBottom: true },
+            { spacer: true },
+            { spacer: true },
+            { spacer: true },
+        ],
+        [
+            { code: "NumLock", label: "Num" },
+            { code: "NumpadDivide", label: "/" },
+            { code: "NumpadMultiply", label: "*" },
+            { code: "NumpadSubtract", label: "-" },
+        ],
+        [
+            { code: "Numpad7", label: "7" },
+            { code: "Numpad8", label: "8" },
+            { code: "Numpad9", label: "9" },
+            { code: "NumpadAdd", label: "+" },
+        ],
+        [
+            { code: "Numpad4", label: "4" },
+            { code: "Numpad5", label: "5" },
+            { code: "Numpad6", label: "6" },
+            { code: "NumpadDecimal", label: "." },
+        ],
+        [
+            { code: "Numpad1", label: "1" },
+            { code: "Numpad2", label: "2" },
+            { code: "Numpad3", label: "3" },
+            { code: "NumpadEnter", label: "Ent" },
+        ],
+        [{ code: "Numpad0", label: "0", w: "w-2" }],
+    ];
+
+    const CHATTER_THRESHOLD_MS = 38;
     const counts = {};
+    const lastReleaseTime = {};
     const pressed = new Set();
     let total = 0,
-        maxRollover = 0;
+        maxRollover = 0,
+        chatterCount = 0;
     const els = {};
     const keyEls = {};
 
-    function build() {
-        const kb = document.getElementById("keyboard");
-        kb.innerHTML = "";
-        LAYOUT.forEach((row) => {
+    function buildCluster(rows, className) {
+        const clusterEl = document.createElement("div");
+        clusterEl.className = "kbd-cluster " + className;
+        rows.forEach((row) => {
             const rowEl = document.createElement("div");
-            rowEl.className = "kbd-row";
+            rowEl.className =
+                "kbd-row" + (row[0]?.gapBottom ? " row-gap-bottom" : "");
             row.forEach((k) => {
+                if (k.spacer) {
+                    const sp = document.createElement("div");
+                    sp.className = "kbd-spacer";
+                    rowEl.appendChild(sp);
+                    return;
+                }
                 const el = document.createElement("div");
                 el.className = "key " + (k.w || "");
                 el.dataset.code = k.code;
@@ -117,8 +180,17 @@ window.KeyboardTest = (() => {
                 rowEl.appendChild(el);
                 keyEls[k.code] = el;
             });
-            kb.appendChild(rowEl);
+            clusterEl.appendChild(rowEl);
         });
+        return clusterEl;
+    }
+
+    function build() {
+        const kb = document.getElementById("keyboard");
+        kb.innerHTML = "";
+        kb.appendChild(buildCluster(MAIN_CLUSTER, "kbd-cluster-main"));
+        kb.appendChild(buildCluster(NAV_CLUSTER, "kbd-cluster-nav"));
+        kb.appendChild(buildCluster(NUM_CLUSTER, "kbd-cluster-num"));
     }
 
     function updateStats() {
@@ -126,29 +198,46 @@ window.KeyboardTest = (() => {
         els.unique.innerText = Object.keys(counts).length;
         els.rollover.innerText = pressed.size;
         els.maxRollover.innerText = maxRollover;
+        els.chatter.innerText = chatterCount;
+        els.chatter.style.color = chatterCount > 0 ? "var(--danger)" : "";
     }
 
     function onKeyDown(e) {
         if (Router.current !== "keyboard") return;
+        if (document.getElementById("hubDialog")?.open) return;
         if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT")
             return;
         e.preventDefault();
 
         const code = e.code || "Key" + e.key.toUpperCase();
+        const el = keyEls[code];
+
         if (!e.repeat) {
+            const now = performance.now();
+            const gap = lastReleaseTime[code]
+                ? now - lastReleaseTime[code]
+                : Infinity;
+            const isChatter = gap < CHATTER_THRESHOLD_MS;
+
             total++;
             counts[code] = (counts[code] || 0) + 1;
             pressed.add(code);
             maxRollover = Math.max(maxRollover, pressed.size);
 
+            if (isChatter) {
+                chatterCount++;
+                if (el) el.classList.add("chatter");
+            }
+
             const entry = document.createElement("div");
-            entry.className = "log-entry";
-            entry.innerHTML = `▼ ${code} <span style="float:right;color:var(--muted)">×${counts[code]}</span>`;
+            entry.className = "log-entry" + (isChatter ? " dbl" : "");
+            entry.innerHTML = isChatter
+                ? `⚠ ${code} CHATTER (${Math.round(gap)}ms) <span style="float:right">×${counts[code]}</span>`
+                : `▼ ${code} <span style="float:right;color:var(--muted)">×${counts[code]}</span>`;
             els.log.prepend(entry);
             while (els.log.childNodes.length > 40) els.log.lastChild.remove();
         }
 
-        const el = keyEls[code];
         if (el) el.classList.add("pressed", "tested");
 
         els.lkKey.innerText = e.key === " " ? "Space" : e.key;
@@ -158,7 +247,9 @@ window.KeyboardTest = (() => {
 
     function onKeyUp(e) {
         if (Router.current !== "keyboard") return;
+        if (document.getElementById("hubDialog")?.open) return;
         const code = e.code || "Key" + e.key.toUpperCase();
+        lastReleaseTime[code] = performance.now();
         pressed.delete(code);
         const el = keyEls[code];
         if (el) el.classList.remove("pressed");
@@ -176,11 +267,13 @@ window.KeyboardTest = (() => {
 
     function reset() {
         for (const k in counts) delete counts[k];
+        for (const k in lastReleaseTime) delete lastReleaseTime[k];
         pressed.clear();
         total = 0;
         maxRollover = 0;
+        chatterCount = 0;
         Object.values(keyEls).forEach((el) =>
-            el.classList.remove("pressed", "tested"),
+            el.classList.remove("pressed", "tested", "chatter"),
         );
         els.lkKey.innerText = "—";
         els.lkCode.innerText = "code: —  ·  keyCode: —";
@@ -193,6 +286,7 @@ window.KeyboardTest = (() => {
         els.unique = document.getElementById("kbdUnique");
         els.rollover = document.getElementById("kbdRollover");
         els.maxRollover = document.getElementById("kbdMaxRollover");
+        els.chatter = document.getElementById("kbdChatter");
         els.lkKey = document.getElementById("lkKey");
         els.lkCode = document.getElementById("lkCode");
         els.log = document.getElementById("kbdLog");

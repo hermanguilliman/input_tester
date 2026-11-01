@@ -6,14 +6,20 @@ window.MouseTest = (() => {
         { id: 3, name: "Back", color: "var(--fg)" },
         { id: 4, name: "Forward", color: "var(--fg)" },
     ];
-    let threshold = 100;
+    let threshold = 65;
     const state = {};
     const els = {};
     let scrollAcc = 0;
+    let scrollBounceCount = 0;
+    let lastScrollTime = 0;
+    let lastScrollDir = 0;
     let clickTimestamps = [];
+    let moveTimestamps = [];
+    let peakHz = 0;
     let points = [];
     let canvas, ctx;
     let rippleHue = 0;
+    let rafId = null;
 
     function reset() {
         BUTTONS.forEach((b) => {
@@ -32,11 +38,25 @@ window.MouseTest = (() => {
             if (g) g.innerText = "—";
         });
         scrollAcc = 0;
+        scrollBounceCount = 0;
+        lastScrollTime = 0;
+        lastScrollDir = 0;
         clickTimestamps = [];
+        moveTimestamps = [];
+        peakHz = 0;
         points = [];
         els.scrollTotal.innerText = "0";
+        els.scrollBounce.innerText = "0";
+        els.scrollBounce.style.color = "var(--fg)";
+        els.scrollDir.innerText = I18n.t("idle");
+        els.scrollDir.style.color = "var(--accent)";
         els.cpsVal.innerText = "0.0";
+        els.trackSpeed.innerText = "0";
+        els.mouseHz.innerText = "0 Hz";
         els.logList.innerHTML = "";
+        if (ctx && canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
     }
 
     function initCards() {
@@ -57,9 +77,17 @@ window.MouseTest = (() => {
         });
     }
 
+    function isIgnoredTarget(target) {
+        return (
+            target.closest(".controls-bar") ||
+            target.closest("header") ||
+            target.closest("#hubDialog")
+        );
+    }
+
     function onDown(e) {
-        if (e.target.closest(".controls-bar") || e.target.closest("header"))
-            return;
+        if (Router.current !== "mouse") return;
+        if (isIgnoredTarget(e.target)) return;
         const id = e.button;
         if (state[id] === undefined) return;
         e.preventDefault();
@@ -83,9 +111,10 @@ window.MouseTest = (() => {
 
         document.getElementById(`cnt-${id}`).innerText = s.count;
         document.getElementById(`dbl-${id}`).innerText = s.dbl;
-        if (s.minGap !== Infinity)
+        if (s.minGap !== Infinity) {
             document.getElementById(`gap-${id}`).innerText =
                 `${Math.round(s.minGap)}/${Math.round(s.maxGap)}`;
+        }
 
         const card = document.getElementById(`card-${id}`);
         card.classList.add("active");
@@ -99,7 +128,7 @@ window.MouseTest = (() => {
 
         const entry = document.createElement("div");
         entry.className = `log-entry ${isDouble ? "dbl" : ""}`;
-        entry.innerHTML = `[${id}] ${isDouble ? "DOUBLE! " : "Click "}<span style="float:right">${isDouble ? Math.round(gap) + "ms" : ""}</span>`;
+        entry.innerHTML = `[${BUTTONS[id]?.name || id}] ${isDouble ? "DOUBLE! " : "Click "}<span style="float:right">${s.count > 1 ? Math.round(gap) + "ms" : ""}</span>`;
         els.logList.prepend(entry);
         while (els.logList.childNodes.length > 40)
             els.logList.lastChild.remove();
@@ -108,9 +137,10 @@ window.MouseTest = (() => {
     }
 
     function onUp(e) {
+        if (Router.current !== "mouse") return;
         const id = e.button;
         if (state[id]) {
-            e.preventDefault();
+            if (!isIgnoredTarget(e.target)) e.preventDefault();
             const svg = document.getElementById("btn" + id);
             if (svg) svg.style.fill = "var(--border-strong)";
             document.getElementById("card-" + id)?.classList.remove("active");
@@ -121,11 +151,8 @@ window.MouseTest = (() => {
         const rect = els.clickZone.getBoundingClientRect();
         const r = document.createElement("div");
         r.className = "click-ripple";
-        // bright colourful waves — double click stays red (chatter marker)
         rippleHue = (rippleHue + 47) % 360;
-        const color = isDbl
-            ? "var(--danger)"
-            : `hsl(${rippleHue}, 100%, 55%)`;
+        const color = isDbl ? "var(--danger)" : `hsl(${rippleHue}, 100%, 55%)`;
         r.style.borderColor = color;
         r.style.boxShadow = `0 0 14px ${color}`;
         r.style.left = e.clientX - rect.left + "px";
@@ -136,20 +163,63 @@ window.MouseTest = (() => {
 
     function onWheel(e) {
         if (Router.current !== "mouse") return;
+        if (e.target.closest("#hubDialog")) return;
+
+        const now = performance.now();
+        const down = e.deltaY > 0;
+        const dir = down ? 1 : -1;
+        const gap = now - lastScrollTime;
+        const isBounce =
+            lastScrollDir !== 0 && dir !== lastScrollDir && gap < 55;
+
+        lastScrollTime = now;
+        lastScrollDir = dir;
+
         scrollAcc += Math.abs(e.deltaY);
         els.scrollTotal.innerText = Math.floor(scrollAcc / 100);
-        const down = e.deltaY > 0;
+
+        if (isBounce) {
+            scrollBounceCount++;
+            els.scrollBounce.innerText = scrollBounceCount;
+            els.scrollBounce.style.color = "var(--danger)";
+            const entry = document.createElement("div");
+            entry.className = "log-entry dbl";
+            entry.innerHTML = `[Scroll] BOUNCE! <span style="float:right">${Math.round(gap)}ms</span>`;
+            els.logList.prepend(entry);
+            while (els.logList.childNodes.length > 40)
+                els.logList.lastChild.remove();
+        }
+
         els.scrollDir.innerText = down ? I18n.t("down") : I18n.t("up");
-        els.scrollDir.style.color = down ? "var(--warn)" : "var(--accent)";
-        let h = parseFloat(els.scrollFill.style.height);
+        els.scrollDir.style.color = isBounce
+            ? "var(--danger)"
+            : down
+              ? "var(--warn)"
+              : "var(--accent)";
+        let h = parseFloat(els.scrollFill.style.height) || 50;
         h = Math.max(0, Math.min(100, h + (down ? -5 : 5)));
         els.scrollFill.style.height = h + "%";
     }
 
     function onMove(e) {
         if (Router.current !== "mouse") return;
-        const rect = canvas.getBoundingClientRect();
         const now = performance.now();
+
+        moveTimestamps.push(now);
+        while (moveTimestamps.length > 0 && now - moveTimestamps[0] > 500) {
+            moveTimestamps.shift();
+        }
+        if (moveTimestamps.length >= 4) {
+            const span = (now - moveTimestamps[0]) / 1000;
+            if (span > 0.05) {
+                const hz = Math.round((moveTimestamps.length - 1) / span);
+                peakHz = Math.max(peakHz, hz);
+                els.mouseHz.innerText = `${hz} Hz (max ${peakHz})`;
+            }
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
         const pt = {
             x: e.clientX - rect.left,
             y: e.clientY - rect.top,
@@ -170,17 +240,20 @@ window.MouseTest = (() => {
     }
 
     function resize() {
-        if (!canvas) return;
+        if (!canvas || !canvas.offsetWidth) return;
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
     }
 
     function draw() {
-        if (ctx) {
+        if (Router.current !== "mouse") {
+            rafId = null;
+            return;
+        }
+        if (ctx && canvas.width > 0) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (points.length >= 2) {
                 const now = performance.now();
-                // rainbow trail — hue rotates over time and along the path
                 const baseHue = (now / 16) % 360;
                 ctx.lineWidth = 3;
                 ctx.lineJoin = "round";
@@ -204,7 +277,11 @@ window.MouseTest = (() => {
                 ctx.shadowBlur = 0;
             }
         }
-        requestAnimationFrame(draw);
+        rafId = requestAnimationFrame(draw);
+    }
+
+    function startLoop() {
+        if (!rafId) rafId = requestAnimationFrame(draw);
     }
 
     function init() {
@@ -214,9 +291,11 @@ window.MouseTest = (() => {
             "scrollFill",
             "scrollTotal",
             "scrollDir",
+            "scrollBounce",
             "clickZone",
             "cpsVal",
             "trackSpeed",
+            "mouseHz",
         ].forEach((id) => (els[id] = document.getElementById(id)));
         els.thresholdSlider = document.getElementById("thresholdSlider");
         els.thresholdVal = document.getElementById("thresholdVal");
@@ -236,12 +315,28 @@ window.MouseTest = (() => {
         window.addEventListener("mousemove", onMove);
         window.addEventListener("resize", resize);
         window.addEventListener("auxclick", (e) => {
-            if (state[e.button] !== undefined) e.preventDefault();
+            if (
+                Router.current === "mouse" &&
+                state[e.button] !== undefined &&
+                !isIgnoredTarget(e.target)
+            ) {
+                e.preventDefault();
+            }
         });
-        I18n.onChange(refreshCardLabels);
+        I18n.onChange(() => {
+            refreshCardLabels();
+            if (lastScrollDir === 0) els.scrollDir.innerText = I18n.t("idle");
+        });
+
+        Router.onChange((tab) => {
+            if (tab === "mouse") {
+                resize();
+                startLoop();
+            }
+        });
 
         resize();
-        draw();
+        if (Router.current === "mouse") startLoop();
     }
 
     return { init, reset };

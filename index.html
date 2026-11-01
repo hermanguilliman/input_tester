@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Тест мыши (даблклик), клавиатуры, геймпада, микрофона и веб-камеры онлайн — Guilliman Input</title>
   <meta name="description"
-    content="Бесплатная онлайн-диагностика устройств ввода в браузере: проверка мыши на даблклик, скролл и CPS, тест клавиш клавиатуры (NKRO), проверка стиков геймпада, тест тачскрина, микрофона и веб-камеры.">
+    content="Бесплатная онлайн-диагностика устройств ввода в браузере: проверка мыши на даблклик, частоту опроса (Hz), скролл и CPS, тест клавиш клавиатуры (NKRO и дребезг), проверка стиков геймпада на дрифт, тест тачскрина, микрофона и веб-камеры.">
   <meta name="keywords"
-    content="тест мыши на даблклик, проверка клавиатуры онлайн, тест тачскрина, проверка геймпада онлайн, тест микрофона, проверка веб камеры, cps тест, nkro тест, input.guilliman.ru">
+    content="тест мыши на даблклик, проверка клавиатуры онлайн, тест тачскрина, проверка геймпада онлайн, тест микрофона, проверка веб камеры, cps тест, nkro тест, polling rate мыши, input.guilliman.ru">
   <meta name="author" content="Herman Guilliman">
 
   <link rel="canonical" href="https://input.guilliman.ru/">
@@ -29,7 +29,7 @@
   <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="Онлайн-тест мыши, клавиатуры, геймпада, микрофона и камеры — Guilliman Input">
   <meta property="og:description"
-    content="Полный набор инструментов для диагностики мыши (даблклик, CPS), клавиатуры (NKRO), сенсора, геймпада, микрофона и камеры прямо в браузере.">
+    content="Полный набор инструментов для диагностики мыши (даблклик, Hz, CPS), клавиатуры (NKRO, chatter), сенсора, геймпада, микрофона и камеры прямо в браузере.">
   <meta property="og:url" content="https://input.guilliman.ru/">
   <meta property="og:image" content="https://input.guilliman.ru/img/og-image.webp">
   <meta property="og:image:width" content="1200">
@@ -61,7 +61,7 @@
     "name": "Guilliman Input Diagnostics",
     "alternateName": "Онлайн-тест мыши, клавиатуры, геймпада, микрофона и камеры",
     "url": "https://input.guilliman.ru/",
-    "description": "Бесплатный веб-сервис для комплексной проверки периферии: тест мыши на даблклик и скролл, проверка клавиш клавиатуры (NKRO), тест стиков и вибрации геймпада, проверка мультитача, микрофона и веб-камеры.",
+    "description": "Бесплатный веб-сервис для комплексной проверки периферии: тест мыши на даблклик, частоту опроса и скролл, проверка клавиш клавиатуры (NKRO), тест стиков и вибрации геймпада, проверка мультитача, микрофона и веб-камеры.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
     "inLanguage": ["ru", "en", "zh"],
@@ -106,17 +106,17 @@
       </div>
 
       <div class="tabs" role="tablist">
-        <button class="tab active" data-tab="mouse"><i class="fas fa-mouse"></i><span
+        <button class="tab active" role="tab" aria-selected="true" data-tab="mouse"><i class="fas fa-mouse"></i><span
             data-i18n="tabMouse">Мышь</span></button>
-        <button class="tab" data-tab="keyboard"><i class="fas fa-keyboard"></i><span
+        <button class="tab" role="tab" aria-selected="false" data-tab="keyboard"><i class="fas fa-keyboard"></i><span
             data-i18n="tabKeyboard">Клавиатура</span></button>
-        <button class="tab" data-tab="touch"><i class="fas fa-hand-pointer"></i><span
+        <button class="tab" role="tab" aria-selected="false" data-tab="touch"><i class="fas fa-hand-pointer"></i><span
             data-i18n="tabTouch">Сенсор</span></button>
-        <button class="tab" data-tab="gamepad"><i class="fas fa-gamepad"></i><span
+        <button class="tab" role="tab" aria-selected="false" data-tab="gamepad"><i class="fas fa-gamepad"></i><span
             data-i18n="tabGamepad">Геймпад</span></button>
-        <button class="tab" data-tab="mic"><i class="fas fa-microphone"></i><span
+        <button class="tab" role="tab" aria-selected="false" data-tab="mic"><i class="fas fa-microphone"></i><span
             data-i18n="tabMic">Микрофон</span></button>
-        <button class="tab" data-tab="camera"><i class="fas fa-video"></i><span
+        <button class="tab" role="tab" aria-selected="false" data-tab="camera"><i class="fas fa-video"></i><span
             data-i18n="tabCamera">Камера</span></button>
       </div>
 
@@ -140,7 +140,7 @@
         <label class="haptic-toggle">
           <input type="checkbox" id="hapticCheck">
           <span class="haptic-slider"></span>
-          <span data-i18n="haptic">Хаптика</span>
+          <span data-i18n="haptic">Тактильная отдача</span>
         </label>
         <label class="haptic-toggle">
           <input type="checkbox" id="drawModeCheck">
@@ -199,8 +199,12 @@
       <div class="controls-bar">
         <div class="threshold-group">
           <span class="mini-label" data-i18n="dblThreshold">Порог Double Click:</span>
-          <input type="range" class="threshold-slider" id="thresholdSlider" min="80" max="600" value="100">
-          <span class="threshold-val" id="thresholdVal">100ms</span>
+          <input type="range" class="threshold-slider" id="thresholdSlider" min="15" max="300" value="65">
+          <span class="threshold-val" id="thresholdVal">65ms</span>
+        </div>
+        <div class="mouse-top-metric">
+          <span class="mini-label" data-i18n="hzLabel">Частота</span>:
+          <b class="mini-stat" id="mouseHz">0 Hz</b>
         </div>
       </div>
       <div class="mouse-layout">
@@ -229,7 +233,7 @@
               <!-- Тень под корпусом -->
               <ellipse cx="100" cy="302" rx="74" ry="13" fill="var(--shadow)" opacity="0.5" />
 
-              <!-- Боковые кнопки (Back / Forward), прикреплены вплотную к левому краю -->
+              <!-- Боковые кнопки (Back / Forward) -->
               <path id="btn4" d="M33,150 L22,150 Q16,150 16,157 L16,170 Q16,176 22,176 L33,176 Z"
                 fill="var(--border-strong)" />
               <path id="btn3" d="M33,181 L22,181 Q16,181 16,188 L16,201 Q16,207 22,207 L33,207 Z"
@@ -264,10 +268,13 @@
             <div class="scroll-bar-wrap">
               <div class="scroll-fill" id="scrollFill" style="height:50%"></div>
             </div>
-            <div>
+            <div style="flex:1">
               <div class="mini-label" data-i18n="scroll">Скролл</div>
               <div class="mini-stat" id="scrollTotal">0</div>
               <div class="mini-label" id="scrollDir" style="color:var(--accent)" data-i18n="idle">Покой</div>
+              <div class="mini-label" style="margin-top:4px">
+                <span data-i18n="scrollBounce">Отскок</span>: <b id="scrollBounce" style="color:var(--fg)">0</b>
+              </div>
             </div>
           </div>
         </aside>
@@ -312,6 +319,10 @@
           <span class="mini-label" data-i18n="maxRollover">Максимум одновременно</span>
           <span class="big" id="kbdMaxRollover">0</span>
         </div>
+        <div class="kbd-stat-card">
+          <span class="mini-label" data-i18n="kbdChatter">Дребезг (Chatter)</span>
+          <span class="big" id="kbdChatter">0</span>
+        </div>
       </div>
       <div class="kbd-main">
         <div class="panel kbd-visual-panel">
@@ -344,10 +355,11 @@
       <div class="gp-content" id="gpContent">
         <div class="gp-header">
           <div class="gp-dot"></div>
-          <div style="flex:1">
+          <div style="flex:1; min-width:0;">
             <div class="gp-id" id="gpId">—</div>
             <div class="gp-meta" id="gpMeta">—</div>
           </div>
+          <select class="lang-select" id="gpSelect" title="Gamepad" style="display:none; max-width:180px;"></select>
           <button class="reset-btn" id="gpVibrateBtn"><i class="fas fa-wave-square"></i><span
               data-i18n="vibrate">Вибрация</span></button>
         </div>
@@ -360,6 +372,7 @@
             <div class="panel-title" data-i18n="sticks">Стики</div>
             <div>
               <div class="stick-pad">
+                <canvas class="stick-canvas" id="stickLCanvas" width="220" height="220"></canvas>
                 <div class="stick-cross"></div>
                 <div class="stick-dot" id="stickL"></div>
               </div>
@@ -367,6 +380,7 @@
             </div>
             <div>
               <div class="stick-pad">
+                <canvas class="stick-canvas" id="stickRCanvas" width="220" height="220"></canvas>
                 <div class="stick-cross"></div>
                 <div class="stick-dot" id="stickR"></div>
               </div>
@@ -381,6 +395,7 @@
       <div class="controls-bar">
         <button class="reset-btn" id="micToggleBtn"><i class="fas fa-microphone"></i><span
             data-i18n="micStart">Старт</span></button>
+        <select class="lang-select device-select" id="micSelect" title="Microphone"></select>
         <label class="haptic-toggle">
           <input type="checkbox" id="micAutoMute" checked>
           <span class="haptic-slider"></span>
@@ -443,10 +458,16 @@
       <div class="controls-bar">
         <button class="reset-btn" id="camToggleBtn"><i class="fas fa-video"></i><span
             data-i18n="camStart">Старт</span></button>
+        <select class="lang-select device-select" id="camSelect" title="Camera"></select>
         <label class="haptic-toggle">
           <input type="checkbox" id="camGridToggle">
           <span class="haptic-slider"></span>
           <span data-i18n="camGrid">Сетка</span>
+        </label>
+        <label class="haptic-toggle">
+          <input type="checkbox" id="camMirrorToggle" checked>
+          <span class="haptic-slider"></span>
+          <span data-i18n="camMirror">Зеркало</span>
         </label>
         <button class="reset-btn" id="camScreenshotBtn" title="Screenshot"><i class="fas fa-camera"></i></button>
         <span class="mic-status" id="camStatusMsg" data-i18n="camIdle">Ожидание</span>
@@ -454,7 +475,7 @@
       <div class="cam-layout">
         <div class="panel cam-preview-panel">
           <div class="cam-preview-wrap" id="camPreviewWrap">
-            <video id="camVideo" autoplay playsinline muted></video>
+            <video id="camVideo" class="mirrored" autoplay playsinline muted></video>
             <canvas id="camGridCanvas"></canvas>
             <div class="cam-hint" id="camHint" data-i18n="camHint">Нажмите «Старт» для запуска камеры</div>
           </div>
@@ -545,19 +566,18 @@
           <strong>Guilliman Input Diagnostics</strong> — бесплатный комплексный инструмент для тестирования компьютерной
           периферии и смартфонов прямо в браузере. Проверьте <strong>мышь на двойной клик (даблклик)</strong> с
           настройкой
-          порога в миллисекундах, протестируйте энкодер колеса прокрутки (скролл), боковые кнопки и скорость кликов
-          (CPS-тест).
-          В разделе <strong>«Клавиатура»</strong> проверяйте срабатывание и залипание клавиш, считывайте
-          <code>keyCode</code> и
+          порога в миллисекундах, частоту опроса (Polling Rate, Hz), протестируйте энкодер колеса прокрутки на отскок,
+          боковые кнопки и скорость кликов (CPS-тест). В разделе <strong>«Клавиатура»</strong> проверяйте срабатывание,
+          дребезг (Chatter) и залипание клавиш на полноразмерной раскладке, считывайте <code>keyCode</code> и
           тестируйте количество одновременных нажатий (NKRO / Key Rollover).
         </p>
         <p>
           Подключите контроллер во вкладке <strong>«Геймпад»</strong> для проверки кнопок, триггеров, виброотдачи и
           диагностики
-          дрифта стиков (DualShock, DualSense, Xbox). На сенсорных экранах доступен тест <strong>мультитача</strong>, а
-          во вкладках
+          дрифта и окружности стиков (DualShock, DualSense, Xbox). На сенсорных экранах доступен тест
+          <strong>мультитача</strong>, а во вкладках
           <strong>«Микрофон»</strong> и <strong>«Камера»</strong> — измерение уровня сигнала в дБ, клиппинга, разрешения
-          и FPS.
+          и реального FPS.
         </p>
       </section>
     </div>
